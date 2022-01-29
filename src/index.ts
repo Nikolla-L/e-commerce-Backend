@@ -6,7 +6,7 @@ import cors from 'cors';
 import productRouter from "./routes/productRoutes";
 import authRouter from "./routes/authRoutes";
 
-const port = 3001;
+let port = process.env.PORT || 3001;
 
 createConnection()
     .then(async connection => {
