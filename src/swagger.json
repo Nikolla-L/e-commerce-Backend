@@ -20,7 +20,7 @@
         }
     ],
     "paths": {
-        "/product/all": {
+        "/product/": {
             "get": {
                 "responses": {
                     "200": {
