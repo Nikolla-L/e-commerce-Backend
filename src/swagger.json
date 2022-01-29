@@ -50,6 +50,40 @@
                     }
                 }
             }
+        },
+        "/files/upload": {
+            "get": {
+                "summary": "აქედან იტვირთება single ფაილი(ფოტო), ჯერჯერობით",
+                "responses": {
+                    "200": {
+                        "description": "A successful response"
+                    },
+                    "400": {
+                        "description": "Failed, product not found"
+                    }
+                }
+            }
+        },
+        "/files/{id}": {
+            "get": {
+                "summary": "თითოეულ ფაილზე(ფოტოზე) წვდომა თავიანთი Id-ებით",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "Id of single file"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response"
+                    },
+                    "400": {
+                        "description": "Failed, product not found"
+                    }
+                }
+            }
         }
     }
 }

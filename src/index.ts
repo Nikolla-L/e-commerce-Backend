@@ -7,6 +7,8 @@ import productRouter from "./routes/productRoutes";
 import authRouter from "./routes/authRoutes";
 import swaggerUi from 'swagger-ui-express' 
 import swaggerDocs from './swagger.json'
+import {MYFile} from "./entity/file"
+import fileUpload from "express-fileupload";
 
 let port = process.env.PORT || 3001;
 
@@ -15,6 +17,10 @@ createConnection()
         const app = express();
         app.use(cors())
         app.use(BodyParser.json());
+
+        app.use(fileUpload({
+            limits: { fileSize: 50 * 1024 * 1024 },
+        }));
 
         app.use('/product', productRouter)
         app.use('/auth', authRouter);
