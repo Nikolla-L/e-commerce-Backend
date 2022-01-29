@@ -22,9 +22,31 @@
     "paths": {
         "/product/": {
             "get": {
+                "summary": "ყველა პროდუქტის მიღება",
                 "responses": {
                     "200": {
                         "description": "A successful response"
+                    }
+                }
+            }
+        },
+        "/product/{id}": {
+            "get": {
+                "summary": "პროდუქტის მიღება გადაცემული Id-ით",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "Id of single product"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response"
+                    },
+                    "400": {
+                        "description": "Failed, product not found"
                     }
                 }
             }
