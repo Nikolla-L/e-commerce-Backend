@@ -1,0 +1,33 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "სვაგერი nodeJs და TupeORM ბექენდისა, ალილუია!",
+        "description": "A minimal and easy to follow example of what you need to create a CRUD style API in NodeJs using TypeScript",
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        }
+    },
+    "servers": [
+        {
+            "url": "/",
+            "description": "ლოკალური სერვერი ან ჰეროკუ"
+        },
+        {
+            "url": "/api/",
+            "description": "docker-compose და nginx proxy"
+        }
+    ],
+    "paths": {
+        "/product/all": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "A successful response"
+                    }
+                }
+            }
+        }
+    }
+}

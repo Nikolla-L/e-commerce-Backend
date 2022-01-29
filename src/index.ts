@@ -5,6 +5,8 @@ import BodyParser from 'body-parser';
 import cors from 'cors';
 import productRouter from "./routes/productRoutes";
 import authRouter from "./routes/authRoutes";
+import swaggerUi from 'swagger-ui-express' 
+import swaggerDocs from './swagger.json'
 
 let port = process.env.PORT || 3001;
 
@@ -16,6 +18,8 @@ createConnection()
 
         app.use('/product', productRouter)
         app.use('/auth', authRouter);
+        
+        app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
         app.listen(port, () => console.log(`Server is running on port ${port}`))
     }).catch(err => {
