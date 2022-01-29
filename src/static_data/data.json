@@ -1,0 +1,130 @@
+{
+    "data": [
+        {
+            "id": 1,
+            "title": "White Bag",
+            "price": 220,
+            "old_price": null,
+            "sale": false
+        },
+        {
+            "id": 2,
+            "title": "Red Bag",
+            "price": 550,
+            "old_price": null,
+            "sale": false
+        },
+        {
+            "id": 3,
+            "title": "vincxas sandlebi",
+            "price": 225,
+            "old_price": null,
+            "sale": false
+        },
+        {
+            "id": 4,
+            "title": "Bo voil",
+            "price": 225,
+            "old_price": 400,
+            "sale": true
+        },
+        {
+            "id": 5,
+            "title": "Lviol",
+            "price": 300,
+            "old_price": 550,
+            "sale": true
+        },
+        {
+            "id": 6,
+            "title": "Shoes 33",
+            "price": 500,
+            "old_price": null,
+            "sale": false
+        },
+        {
+            "id": 7,
+            "title": "Small Bag",
+            "price": 320,
+            "old_price": null,
+            "sale": false
+        },
+        {
+            "id": 8,
+            "title": "Big Bag",
+            "price": 500,
+            "old_price": null,
+            "sale": false
+        },
+        {
+            "id": 8,
+            "title": "Yello Bag",
+            "price": 600,
+            "old_price": 700,
+            "sale": true
+        },
+        {
+            "id": 9,
+            "title": "Helix",
+            "price": 100,
+            "old_price": null,
+            "sale": false
+        },
+        {
+            "id": 10,
+            "title": "Briks",
+            "price": 635,
+            "old_price": 700,
+            "sale": true
+        },
+        {
+            "id": 11,
+            "title": "vincxas fexsacmeli",
+            "price": 411,
+            "old_price": 520,
+            "sale": true
+        },
+        {
+            "id": 12,
+            "title": "Bo voil",
+            "price": 225,
+            "old_price": 400,
+            "sale": true
+        },
+        {
+            "id": 13,
+            "title": "Back in stock",
+            "price": 300,
+            "old_price": 550,
+            "sale": true
+        },
+        {
+            "id": 14,
+            "title": "Shoes R2",
+            "price": 254,
+            "old_price": null,
+            "sale": false
+        },
+        {
+            "id": 15,
+            "title": "Medium Bag",
+            "price": 310,
+            "old_price": 410,
+            "sale": true
+        },
+        {
+            "id": 16,
+            "title": "Bo Male",
+            "price": 680,
+            "old_price": null,
+            "sale": false
+        },
+        {
+            "id": 17,
+            "title": "Large shoe",
+            "price": 1000,
+            "old_price": 1200,
+            "sale": true
+        }
+    ]
+}
