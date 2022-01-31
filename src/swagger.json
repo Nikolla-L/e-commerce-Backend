@@ -51,7 +51,64 @@
                 }
             }
         },
-        "/files/upload": {
+        "/auth/register": {
+            "post": {
+                "summary": "რეგისტრაცია",
+                "produces": [
+                    "application/json"
+                ],
+                "requestBody": {
+                    "description": "Auth object",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref":"#/definitions/User"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "A successful create response"
+                    },
+                    "400": {
+                        "description": "Failed, some errors"
+                    },
+                    "409": {
+                        "description": "User already exists"
+                    }
+                }
+            }
+        },
+        "/auth/login": {
+            "post": {
+                "summary": "ავტორიზაცია",
+                "produces": [
+                    "application/json"
+                ],
+                "requestBody": {
+                    "description": "Login object",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref":"#/definitions/Login"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful"
+                    },
+                    "401": {
+                        "description": "Failed authorization"
+                    }
+                }
+            }
+        },
+        "/product/files/upload": {
             "get": {
                 "summary": "აქედან იტვირთება single ფაილი(ფოტო), ჯერჯერობით",
                 "responses": {
@@ -64,7 +121,7 @@
                 }
             }
         },
-        "/files/{id}": {
+        "/product/files/{id}": {
             "get": {
                 "summary": "თითოეულ ფაილზე(ფოტოზე) წვდომა თავიანთი Id-ებით",
                 "parameters": [
@@ -82,6 +139,36 @@
                     "400": {
                         "description": "Failed, product not found"
                     }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "Login": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "User": {
+            "type": "object",
+            "properties": {
+                "firstName": {
+                    "type": "string"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
                 }
             }
         }
