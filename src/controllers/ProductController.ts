@@ -6,16 +6,32 @@ class ProductController {
     static postProduct = async (req: Request, res: Response) => {
         const newProduct = {
             title: req.body.title,
-            content: req.body.content
+            typeId: req.body.typeId,
+            price: req.body.price,
+            about: req.body.about,
+            materials: req.body.materials,
+            dimensions: req.body.dimensions,
+            careInstructions: req.body.careInstructions
         };
-        const product = getRepository(Product).create(newProduct)
+        const product = await getRepository(Product).create(newProduct);
         const result = await getRepository(Product).save(product);
         return res.json(result);
     }
 
-    static getProduct = async (req: Request, res: Response) => {
-        const result = await getRepository(Product).find();
-        return res.json(result);
+    static getProducts = async (req: Request, res: Response) => {
+        let id = req.query.id
+        if(id == '0' || id==null || id == undefined) {
+            const result = await getRepository(Product).createQueryBuilder("product").getMany();
+            return res.status(200).json(result);
+        } else {
+            id = id.toString();
+            const result = await getRepository(Product)
+                                .createQueryBuilder('p')
+                                .where('p.type_id = :id', {id})
+                                .orderBy('p.created_at', 'ASC')
+                                .getMany();
+            return res.status(200).json(result);
+        }
     }
 
     static getOneProduct = async (req: Request, res: Response) => {

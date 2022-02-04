@@ -2,12 +2,8 @@
     "openapi": "3.0.0",
     "info": {
         "version": "1.0.0",
-        "title": "სვაგერი nodeJs და TupeORM ბექენდისა, ალილუია!",
-        "description": "A minimal and easy to follow example of what you need to create a CRUD style API in NodeJs using TypeScript",
-        "license": {
-            "name": "MIT",
-            "url": "https://opensource.org/licenses/MIT"
-        }
+        "title": "E-commerse project with nodeJs & TypeORM",
+        "description": "A minimal and easy to follow example of what you need to create a CRUD style API in NodeJs using TypeScript"
     },
     "servers": [
         {
@@ -19,19 +15,64 @@
             "description": "docker-compose და nginx proxy"
         }
     ],
+    "tags": [
+        {
+            "name": "Auth",
+            "description": "API for login&auth"
+        },
+        {
+            "name": "Product",
+            "description": "API for product actions"
+        },
+        {
+            "name": "Cart",
+            "description": "API for cart products actions"
+        }
+    ],
     "paths": {
         "/product/": {
             "get": {
+                "tags":["Product"],
                 "summary": "ყველა პროდუქტის მიღება",
                 "responses": {
                     "200": {
                         "description": "A successful response"
                     }
                 }
+            },
+            "post": {
+                "tags":["Product"],
+                "summary": "ახალი პროდუქტის დამატება",
+                "produces": [
+                    "application/json"
+                ],
+                "requestBody": {
+                    "description": "Product object",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref":"#/definitions/Product"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Failed, Bad request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
             }
         },
         "/product/{id}": {
             "get": {
+                "tags":["Product"],
                 "summary": "პროდუქტის მიღება გადაცემული Id-ით",
                 "parameters": [
                     {
@@ -49,10 +90,31 @@
                         "description": "Failed, product not found"
                     }
                 }
+            },
+            "delete": {
+                "tags":["Product"],
+                "summary": "პროდუქტის წაშლა Id-ით",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "Id of single product"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successfully deleted"
+                    },
+                    "400": {
+                        "description": "Failed"
+                    }
+                }
             }
         },
         "/auth/register": {
             "post": {
+                "tags": ["Auth"],
                 "summary": "რეგისტრაცია",
                 "produces": [
                     "application/json"
@@ -83,6 +145,7 @@
         },
         "/auth/login": {
             "post": {
+                "tags": ["Auth"],
                 "summary": "ავტორიზაცია",
                 "produces": [
                     "application/json"
@@ -110,6 +173,7 @@
         },
         "/product/files/upload": {
             "get": {
+                "tags": ["Product"],
                 "summary": "აქედან იტვირთება single ფაილი(ფოტო), ჯერჯერობით",
                 "responses": {
                     "200": {
@@ -123,6 +187,7 @@
         },
         "/product/files/{id}": {
             "get": {
+                "tags": ["Product"],
                 "summary": "თითოეულ ფაილზე(ფოტოზე) წვდომა თავიანთი Id-ებით",
                 "parameters": [
                     {
@@ -138,6 +203,96 @@
                     },
                     "400": {
                         "description": "Failed, product not found"
+                    }
+                }
+            }
+        },
+        "/cart/": {
+            "get": {
+                "tags": ["Cart"],
+                "summary": "ქარტში დამატებული ყველა პროდუქტის მიღება",
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "required": true,
+                        "description": "დამმატებელი იუზერის Id (current user Id)"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response"
+                    },
+                    "400": {
+                        "description": "Failed, cart product not found"
+                    }
+                }
+            },
+            "post": {
+                "tags": ["Cart"],
+                "summary": "ქარტში პროდუქტის დამატება",
+                "produces": [
+                    "application/json"
+                ],
+                "requestBody": {
+                    "description": "Cart object",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref":"#/definitions/CartProduct"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    }
+                }
+            }
+        },
+        "/cart/{id}": {
+            "get": {
+                "tags": ["Cart"],
+                "summary": "ქართის პროდუქტის მიღება Id-ით",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "Id of single cart product"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response"
+                    },
+                    "400": {
+                        "description": "Failed, cart product not found"
+                    }
+                }
+            },
+            "delete": {
+                "tags": ["Cart"],
+                "summary": "ქარტის პროდუქტის წაშლა Id-ით",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "Id of single cart product"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successfully deleted"
+                    },
+                    "400": {
+                        "description": "Failed"
                     }
                 }
             }
@@ -168,6 +323,43 @@
                     "type": "string"
                 },
                 "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "Product": {
+            "type": "object",
+            "properties": {
+                "title": {
+                    "type": "string"
+                },
+                "tyepId": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "string"
+                },
+                "about": {
+                    "type": "string"
+                },
+                "materials": {
+                    "type": "string"
+                },
+                "dimensions": {
+                    "type": "string"
+                },
+                "careInstructions": {
+                    "type": "string"
+                }
+            }
+        },
+        "CartProduct": {
+            "type": "object",
+            "properties": {
+                "productId": {
+                    "type": "string"
+                },
+                "userId": {
                     "type": "string"
                 }
             }

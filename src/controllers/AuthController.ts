@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
 import { User } from '../entity/User';
-import { BaseEntity, getRepository } from 'typeorm';
+import { BaseEntity, getRepository, SimpleConsoleLogger } from 'typeorm';
 import { validate } from 'class-validator';
-import { updateUser } from 'src/Repository';
+import { updateUser } from '../Repository';
+import bcrypt from 'bcryptjs';
 
 class AuthController extends BaseEntity {
     static login = async (req: Request, res: Response) => {
@@ -48,7 +49,22 @@ class AuthController extends BaseEntity {
     }
 
     static updateUser = async (req: Request, res: Response) => {
-        
+        const {firstName, lastName, email, password} = req.body;
+        const userRepository = getRepository(User);
+        try {
+            let user = await userRepository.findOne({email: email});
+            if (user && !user.isValidPassword(password)) {
+                res.status(401).send('araswori password!')
+                return
+            }
+            if (firstName != '' && email != '' && lastName != '' && password != '') {
+                await updateUser(firstName, lastName, email, bcrypt.hashSync(password, 8))
+            } else {
+                res.status(400).send('Empty fields')
+            }
+        } catch (error) {
+            res.status(409).send('Some kind of error')
+        }
     }
 }
 export default AuthController;

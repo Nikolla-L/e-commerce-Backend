@@ -1,19 +1,16 @@
 
 {
     "type": "postgres",
-    "host": "ec2-3-216-113-109.compute-1.amazonaws.com",
+    "host": "localhost",
     "port": 5432,
-    "username": "yajglndvtkdfkq",
-    "password": "739b6cdaa4e53770da926e1f2d7152ffe4c157da5735bc6948ca0706efbf0ce9",
-    "database": "d62vv0sf2jl36p",
+    "username": "postgres",
+    "password": "jomolungma",
+    "database": "e_commerse",
     "logging": true,
     "entities": ["src/entity/**/*.ts"],
     "migrations": ["src/migration/**/*.ts"],
     "subscribers": ["src/subscriber/**/*.ts"],
     "synchronize":true,
-    "ssl": {
-      "rejectUnauthorized": false
-    },
     "cli": {
       "entitiesDir": "src/entity",
       "migrationsDir": "src/migration",
