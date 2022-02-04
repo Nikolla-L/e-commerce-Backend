@@ -1,11 +1,11 @@
 
 {
     "type": "postgres",
-    "host": "ec2-3-216-113-109.compute-1.amazonaws.com",
+    "host": "ec2-3-219-204-29.compute-1.amazonaws.com",
     "port": 5432,
-    "username": "yajglndvtkdfkq",
-    "password": "739b6cdaa4e53770da926e1f2d7152ffe4c157da5735bc6948ca0706efbf0ce9",
-    "database": "d62vv0sf2jl36p",
+    "username": "qdqpegyxggwfqv",
+    "password": "2cad8604ee2f52ac066f5e106ec764c8f77444f9a52165da0e181ab2c7531032",
+    "database": "de7lv7cdjjsj6c",
     "logging": true,
     "entities": ["src/entity/**/*.ts"],
     "migrations": ["src/migration/**/*.ts"],
