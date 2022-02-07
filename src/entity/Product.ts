@@ -2,9 +2,7 @@ import {
     Entity,
     PrimaryGeneratedColumn,
     Column,
-    CreateDateColumn,
-    ManyToMany,
-    JoinColumn
+    CreateDateColumn
 } from "typeorm";
 
 @Entity('products')

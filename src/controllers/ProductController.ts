@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { getRepository } from 'typeorm';
 import { Product } from '../entity/Product';
+const request = require('request-promise');
 
 class ProductController {
     static postProduct = async (req: Request, res: Response) => {
@@ -35,9 +36,41 @@ class ProductController {
     }
 
     static getOneProduct = async (req: Request, res: Response) => {
-        const id = req.params.id;
-        const product = await getRepository(Product).findOne(id);
-        return res.json(product);
+        let caucasus: any = {};
+        await request('https://freecurrencyapi.net/api/v2/latest?apikey=22fdaaa0-87ec-11ec-b421-4b29aa3a7e8a')
+        .then(async (response: any) => {
+            let currencies = JSON.parse(response).data;
+            caucasus = {...caucasus, gela: currencies.GEL, putini: currencies.RUB};
+
+            const financial = (x: any) => {
+                return Number.parseFloat(x).toFixed(2);
+            }
+
+            const id = req.params.id;
+            let product = await getRepository(Product).findOne(id);
+            let productPrice = product?.price;
+            let prices = [
+                {
+                    name: 'USD',
+                    price: productPrice
+                },
+                {
+                    name: 'GEL',
+                    price: productPrice ? financial(productPrice*caucasus.gela) : null
+                },
+                {
+                    name: 'RUB',
+                    price: productPrice? financial(productPrice*caucasus.putini) : null
+                }
+            ];
+            let productObj: any = product;
+            productObj.price = prices;
+            return res.json(productObj);
+        })
+        .catch((error: any) => {
+            console.log(error)
+            res.status(404).send('Not found')
+        })
     }
 
     static updateProduct = async (req: Request, res: Response) => {
