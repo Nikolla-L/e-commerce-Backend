@@ -10,6 +10,7 @@ import swaggerUi from 'swagger-ui-express'
 import swaggerDocs from './swagger.json'
 import {MYFile} from "./entity/file"
 import fileUpload from "express-fileupload";
+import ProductController from './controllers/ProductController';
 
 let port = process.env.PORT || 3001;
 
@@ -28,6 +29,9 @@ createConnection()
         app.use('/auth', authRouter);
         app.use('/cart', cartRouter);
         
+        //static types api
+        app.get('/types', ProductController.getTypes)
+
         app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
         app.listen(port, () => console.log(`Server is running on port ${port}`))

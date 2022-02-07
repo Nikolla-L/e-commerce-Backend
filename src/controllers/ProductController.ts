@@ -20,7 +20,7 @@ class ProductController {
     }
 
     static getProducts = async (req: Request, res: Response) => {
-        let id = req.query.id
+        let id = req.query.id;
         if(id == '0' || id==null || id == undefined) {
             const result = await getRepository(Product).createQueryBuilder("product").getMany();
             return res.status(200).json(result);
@@ -88,6 +88,40 @@ class ProductController {
         const id = req.params.id;
         const product = await getRepository(Product).delete(id);
         return res.json(product);
+    }
+
+    static getTypes = async (req: Request, res: Response) => {
+        const types = [
+            {
+                typeId: 1, 
+                typeName: "Tote bags"
+            },
+            {
+                typeId: 2, 
+                typeName: "Shoulder bags"
+            },
+            {
+                typeId: 3, 
+                typeName: "Crossbody bags"
+            },
+            {
+                typeId: 4, 
+                typeName: "Top handle bags"
+            },
+            {
+                typeId: 5, 
+                typeName: "Mini bags"
+            },
+            {
+                typeId: 6, 
+                typeName: "Sandals"
+            },
+            {
+                typeId: 7, 
+                typeName: "Boots"
+            }
+        ]
+        return res.json(types)
     }
 }
 export default ProductController;

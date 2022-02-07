@@ -30,10 +30,32 @@
         }
     ],
     "paths": {
-        "/product/": {
+        "/types": {
+            "get": {
+                "tags":["Product"],
+                "summary": "პროდუქტის ტიპების Id-ების დათვალიერება",
+                "responses": {
+                    "200": {
+                        "description": "A successful response"
+                    }
+                }
+            }
+        },
+        "/product": {
             "get": {
                 "tags":["Product"],
                 "summary": "ყველა პროდუქტის მიღება",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "required": false,
+                        "description": "პროდუქტის ტიპის მითითება (იგულისხმება ტიპები რომლებიც მაღლა როუტში მოიცემა)",
+                        "schema": {
+                            "$ref": "#/definitions/id"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "A successful response"
