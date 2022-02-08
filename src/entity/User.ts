@@ -17,7 +17,7 @@ export class User {
         name: 'first_name',
         nullable: true
     })
-    firsName: string;
+    firstName: string;
 
     @Column({
         name: 'last_name',

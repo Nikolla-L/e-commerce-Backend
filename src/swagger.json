@@ -193,6 +193,42 @@
                 }
             }
         },
+        "/auth/list": {
+            "get": {
+                "tags": ["Auth"],
+                "summary": "იუზერების ლისთის მიღება",
+                "description": "გარდა ჩვენს პონტში იუზერების დათალიერებისა სხვა მიზნობრივი დატვირთა არ აქვს. რეალობაში სიგიჟეცაა ასე ღიად პირადი ინფორს და პაროლების გამოჩენა. ",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Something happened, kind of error"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            }
+        },
+        "/auth/logout": {
+            "post": {
+                "tags": ["Auth"],
+                "summary": "სისტემიდან გასვლა",
+                "description": "მხოლოდ რიქვესთი ყოველგვარი პარამეტრის და body-ს გარეშე. ბრაუზერიდან ავტომატურად შლის ტოკენს, ხოლო ამის შემდგომ დაბლა არსებული ყველა როუტი იბლოკება",
+                "responses": {
+                    "200": {
+                        "description": "A successful logout response"
+                    },
+                    "400": {
+                        "description": "Something happened, kind of error"
+                    },
+                    "409": {
+                        "description": "User already log outede"
+                    }
+                }
+            }
+        },
         "/product/files/upload": {
             "get": {
                 "tags": ["Product"],

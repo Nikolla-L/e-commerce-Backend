@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 import { User } from '../entity/User';
-import { BaseEntity, getRepository, SimpleConsoleLogger } from 'typeorm';
+import { BaseEntity, getRepository, getConnection } from 'typeorm';
 import { validate } from 'class-validator';
-import { updateUser } from '../Repository';
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken'
 
 class AuthController extends BaseEntity {
     static login = async (req: Request, res: Response) => {
@@ -16,13 +16,25 @@ class AuthController extends BaseEntity {
         try {
             let user = await userRepository.findOne({email: email});
             if (user && !user.isValidPassword(password)) {
-                res.status(401).send('araswori password!')
-                return
+                res.status(401).send('Incorrect password!')
+                return;
             }
-            res.status(200).json({access_token: user?.generateJWT()});
+            const payload = {
+                email: user?.email,
+                id: user?.id
+            }
+            const token = jwt.sign(payload, 'secret', {expiresIn: '15m'})
+            res.cookie('session-token', token)
+            res.status(200).json({access_token: user?.generateJWT(), token: token});
         } catch (error) {
-            res.status(401).send('araavtorizebulio - Unauthorized')
+            res.status(400).send('Bad Request')
         }
+    }
+
+    static logout = async (req: Request, res: Response) => {
+        res.clearCookie('session-token')
+        res.clearCookie('access_token')
+        res.send('logout').redirect('/login')
     }
 
     static register = async (req: Request, res: Response) => {
@@ -58,12 +70,26 @@ class AuthController extends BaseEntity {
                 return
             }
             if (firstName != '' && email != '' && lastName != '' && password != '') {
-                await updateUser(firstName, lastName, email, bcrypt.hashSync(password, 8))
+                await getConnection()
+                    .createQueryBuilder()
+                    .update(User)
+                    .set({ firstName: firstName, lastName: lastName, email: email, password: bcrypt.hashSync(password, 8) })
+                    .where("email = :email", { email: email })
+                    .execute();
             } else {
                 res.status(400).send('Empty fields')
             }
         } catch (error) {
             res.status(409).send('Some kind of error')
+        }
+    }
+
+    static getAllUsers = async (req: Request, res: Response) => {
+        try {
+            const result = await getRepository(User).createQueryBuilder('user').getMany();
+            res.status(200).json(result);
+        } catch (error) {
+            res.status(400).send('Bad request');
         }
     }
 }
