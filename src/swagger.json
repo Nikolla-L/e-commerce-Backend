@@ -169,6 +169,7 @@
             "post": {
                 "tags": ["Auth"],
                 "summary": "ავტორიზაცია",
+                "description": "ავტორიზაციის შემდეგ დაბლა არსებული როუტები ღიაა მხოლოდ ავტორიზებული მომხმარებლისთვის",
                 "produces": [
                     "application/json"
                 ],
@@ -189,6 +190,66 @@
                     },
                     "401": {
                         "description": "Failed authorization"
+                    }
+                }
+            }
+        },
+        "/auth/forgot-password": {
+            "post": {
+                "tags": ["Auth"],
+                "summary": "პაროლის აღსადგენი კოდის მოთხოვნა",
+                "description": "იმეილის მითითებით ითხოვს პაროლის აღდგენის კოდს",
+                "produces": [
+                    "application/json"
+                ],
+                "requestBody": {
+                    "description": "email string",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref":"#/definitions/ForgotPassword"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            }
+        },
+        "/auth/reset-password": {
+            "put": {
+                "tags": ["Auth"],
+                "summary": "პაროლის აღდგენა (დარესეტება)",
+                "requestBody": {
+                    "description": "ითხოვს იმეილის, შემდეგ კოდის და ბოლოს პაროლების შეყვანას. ფრონტში უნდა მოხდეს სტეპებად: ჯერ იმეილი და კოდი. კოდიდან დადებითი სტატუსის სემთხვევაში კი გამოაჩინოს პაროლის და პაროლის აღდგენის ინფუთები",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/definitions/ResetPassword"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Failed. Bad put data."
+                    },
+                    "404": {
+                        "description": "Failed. User not found."
                     }
                 }
             }
@@ -418,6 +479,31 @@
                     "type": "string"
                 },
                 "userId": {
+                    "type": "string"
+                }
+            }
+        },
+        "ForgotPassword": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                }
+            }
+        },
+        "ResetPassword": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "code": {
+                    "type": "string"
+                },
+                "newPassword": {
+                    "type": "string"
+                },
+                "confirmPassword": {
                     "type": "string"
                 }
             }

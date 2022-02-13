@@ -44,6 +44,13 @@ export class User {
     @UpdateDateColumn()
     updatedAt: Date;
 
+    @Column({
+        name: 'reset_code',
+        nullable: true,
+        default: null
+    })
+    resetCode: string;
+
     setPassword = (password: string) => {
         return (this.password = bcrypt.hashSync(password, 8))
     }

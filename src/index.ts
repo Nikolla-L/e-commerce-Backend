@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { NextFunction } from 'express';
 import 'reflect-metadata';
 import { createConnection } from 'typeorm';
 import BodyParser from 'body-parser';
@@ -15,7 +15,7 @@ import ProductController from './controllers/ProductController';
 
 let port = process.env.PORT || 3001;
 
-const checkAuthenicated = (req: any, res: any, next: any) => {
+const checkAuthenicated = (req: any, res: any, next: NextFunction) => {
     let token = req.cookies['session-token'];
 
     if (!token) {

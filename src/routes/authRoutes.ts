@@ -8,5 +8,7 @@ router.post('/logout', AuthController.logout)
 router.post('/register', AuthController.register)
 router.put('/update', AuthController.updateUser)
 router.get('/list', AuthController.getAllUsers)
+router.post('/forgot-password', AuthController.sendMail)
+router.put('/reset-password', AuthController.checkCode, AuthController.resetPassword)
 
 export default router;
