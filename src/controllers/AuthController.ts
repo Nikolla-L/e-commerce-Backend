@@ -4,8 +4,6 @@ import { BaseEntity, getRepository, getConnection } from 'typeorm';
 import { validate } from 'class-validator';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { getMaxListeners } from 'process';
-import { idText } from 'typescript';
 const nodemailer = require("nodemailer");
 
 const sendMail = async (email: string, code: string) => {
@@ -19,7 +17,6 @@ const sendMail = async (email: string, code: string) => {
             rejectUnauthorized:false
         }
     }); 
-    //  levanixaburzania1@gmail.com, giorgi.bitsadze01@gmail.com
     let info = await transporter.sendMail({
         from: '"e_commerse" <eCommerseTeam@gmail.com>',
         to: email,
