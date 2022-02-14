@@ -5,6 +5,11 @@ import { validate } from 'class-validator';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 const nodemailer = require("nodemailer");
+const {OAuth2Client} = require('google-auth-library');
+
+const googleClient = new OAuth2Client({
+    clientId:`1068850605287-o1pignk020ft6da6c5ijovube2km1k49.apps.googleusercontent.com`
+});
 
 const sendMail = async (email: string, code: string) => {
     let transporter = await nodemailer.createTransport({
@@ -71,9 +76,11 @@ class AuthController extends BaseEntity {
     }
 
     static register = async (req: Request, res: Response) => {
-        const {email, password} = req.body;
+        const {firstName, lastName, email, password} = req.body;
         let user = new User();
 
+        user.firstName = firstName;
+        user.lastName = lastName;
         user.email = email;
         user.password = user.setPassword(password);
 
@@ -181,5 +188,28 @@ class AuthController extends BaseEntity {
             res.status(400).send("User doesn't exist")
         }
     }
+      
+    static googleAuth = async (req: Request, res: Response) => {
+        const { token } = req.body;
+      
+        const ticket = await googleClient.verifyIdToken({
+          idToken: token,
+          audient: `1068850605287-o1pignk020ft6da6c5ijovube2km1k49.apps.googleusercontent.com`,
+        });
+      
+        const payload = ticket.getPayload();
+      
+        let user = await getRepository(User).findOne({email: payload?.email});
+        if (!user) {
+          let user = new User();
+          user.email = payload?.email;
+          user.firstName = payload?.name
+      
+          await getRepository(User).save(user);
+        }
+      
+        res.status(200).json({ user, token });
+    };
 }
+
 export default AuthController;

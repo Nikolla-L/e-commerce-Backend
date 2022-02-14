@@ -194,6 +194,36 @@
                 }
             }
         },
+        "/auth/google-auth": {
+            "post": {
+                "tags": ["Auth"],
+                "summary": "Google ავტორიზაციას",
+                "produces": [
+                    "application/json"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref":"#/definitions/GoogleAuth"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful"
+                    },
+                    "401": {
+                        "description": "Failed authorization"
+                    },
+                    "404": {
+                        "description": "Bad request"
+                    }
+                }
+            }
+        },
         "/auth/forgot-password": {
             "post": {
                 "tags": ["Auth"],
@@ -231,7 +261,7 @@
                 "tags": ["Auth"],
                 "summary": "პაროლის აღდგენა (დარესეტება)",
                 "requestBody": {
-                    "description": "ითხოვს იმეილის, შემდეგ კოდის და ბოლოს პაროლების შეყვანას. ფრონტში უნდა მოხდეს სტეპებად: ჯერ იმეილი და კოდი. კოდიდან დადებითი სტატუსის სემთხვევაში კი გამოაჩინოს პაროლის და პაროლის აღდგენის ინფუთები",
+                    "description": "ითხოვს იმეილს, კოდს და ბოლოს პაროლების შეყვანას. ფრონტში უნდა მოხდეს სტეპებად: ჯერ იმეილი და კოდი. კოდიდან დადებითი სტატუსის შემთხვევაში კი გამოაჩინოს პაროლის და პაროლის აღდგენის ინფუთები",
                     "required": true,
                     "content": {
                         "application/json": {
@@ -479,6 +509,14 @@
                     "type": "string"
                 },
                 "userId": {
+                    "type": "string"
+                }
+            }
+        },
+        "GoogleAuth": {
+            "type": "object",
+            "properties": {
+                "token": {
                     "type": "string"
                 }
             }

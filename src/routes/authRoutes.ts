@@ -10,5 +10,6 @@ router.put('/update', AuthController.updateUser)
 router.get('/list', AuthController.getAllUsers)
 router.post('/forgot-password', AuthController.sendMail)
 router.put('/reset-password', AuthController.checkCode, AuthController.resetPassword)
+router.post('/google-auth', AuthController.googleAuth)
 
 export default router;
