@@ -49,8 +49,9 @@ createConnection()
         app.use('/product', checkAuthenicated, productRouter);
         app.use('/cart', checkAuthenicated, cartRouter);
         
-        // static types api
-        app.get('/types', checkAuthenicated, ProductController.getTypes)
+        // static types and all products api
+        app.get('/types', ProductController.getTypes)
+        app.get('/products', ProductController.getProducts);
 
         // swagger documentation for apis
         app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));

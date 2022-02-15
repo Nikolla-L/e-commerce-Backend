@@ -6,7 +6,6 @@ import {getConnection} from "typeorm";
 const router = express.Router({ mergeParams : true });
 
 router.post("/", ProductController.postProduct);
-router.get("/", ProductController.getProducts);
 router.get("/:id", ProductController.getOneProduct);
 router.put("/:id", ProductController.updateProduct);
 router.delete("/:id", ProductController.deleteProduct);

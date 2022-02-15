@@ -25,6 +25,12 @@ export class User {
     })
     lastName: string;
 
+    @Column({
+        name: 'username',
+        nullable: true
+    })
+    userName: string;
+
     @Column()
     email: string;
 

@@ -63,7 +63,7 @@ class AuthController extends BaseEntity {
             }
             const token = jwt.sign(payload, 'secret', {expiresIn: '15m'})
             res.cookie('session-token', token)
-            res.status(200).json({access_token: user?.generateJWT(), token: token});
+            res.status(200).json({token: token, userData: user});
         } catch (error) {
             res.status(400).send('Bad Request')
         }
@@ -76,11 +76,12 @@ class AuthController extends BaseEntity {
     }
 
     static register = async (req: Request, res: Response) => {
-        const {firstName, lastName, email, password} = req.body;
+        const {firstName, lastName, userName, email, password} = req.body;
         let user = new User();
 
         user.firstName = firstName;
         user.lastName = lastName;
+        user.userName = userName;
         user.email = email;
         user.password = user.setPassword(password);
 
@@ -91,13 +92,26 @@ class AuthController extends BaseEntity {
         }
 
         const userRepository = getRepository(User);
+        let emailExists = await userRepository.findOne({email: email});
+        let userNameExists = await userRepository.findOne({userName: userName});
+
+        if(userNameExists) {
+            res.status(400).send('Account with this username already exists, try another');
+            return;
+        }
+        
+        if(emailExists) {
+            res.status(400).send('Email is already taken');
+            return;
+        }
+
         try {
             await userRepository.save(user);
         } catch (error) {
             res.status(409).send('User ukve arsebobs, exists and etc...')
             return;
         }
-        res.status(201).send('User has been created!');
+        res.status(201).json(user);
     }
 
     static updateUser = async (req: Request, res: Response) => {

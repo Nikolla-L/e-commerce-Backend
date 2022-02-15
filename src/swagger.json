@@ -2,8 +2,8 @@
     "openapi": "3.0.0",
     "info": {
         "version": "1.0.0",
-        "title": "E-commerse project with nodeJs & TypeORM",
-        "description": "A minimal and easy to follow example of what you need to create a CRUD style API in NodeJs using TypeScript"
+        "title": "ძირითადი URL არის https://ecommerse--watamasheba.herokuapp.com/",
+        "description": "E-commerse project with nodeJs & TypeORM"
     },
     "servers": [
         {
@@ -41,7 +41,7 @@
                 }
             }
         },
-        "/product": {
+        "/products": {
             "get": {
                 "tags":["Product"],
                 "summary": "ყველა პროდუქტის მიღება",
@@ -61,7 +61,9 @@
                         "description": "A successful response"
                     }
                 }
-            },
+            }
+        },
+        "/product": {
             "post": {
                 "tags":["Product"],
                 "summary": "ახალი პროდუქტის დამატება",
@@ -138,6 +140,7 @@
             "post": {
                 "tags": ["Auth"],
                 "summary": "რეგისტრაცია",
+                "description": "სახელი და გვარი ნულებადია (nullable), ხოლო დანარჩენის შევსება - აუცილებელი. იმეილის ან იუზერნეიმის უკვე არსებობის შემთხვევაში აბრუნებს ერორს უკვე არსებობსო ექაუნთი მსგავსი იმეილით ან იუზერნეიმით",
                 "produces": [
                     "application/json"
                 ],
@@ -466,6 +469,9 @@
                     "type": "string"
                 },
                 "lastName": {
+                    "type": "string"
+                },
+                "userName": {
                     "type": "string"
                 },
                 "email": {
