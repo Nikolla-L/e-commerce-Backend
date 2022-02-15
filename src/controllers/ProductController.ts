@@ -8,7 +8,7 @@ class ProductController {
         const newProduct = {
             title: req.body.title,
             typeId: req.body.typeId,
-            price: req.body.price,
+            price: Number(req.body.price),
             about: req.body.about,
             materials: req.body.materials,
             dimensions: req.body.dimensions,
@@ -21,18 +21,42 @@ class ProductController {
 
     static getProducts = async (req: Request, res: Response) => {
         let id = req.query.id;
+        let sort = req.query.sort;
+        let productsRepo: any = '';
+        let result: any = [];
+        
         if(id == '0' || id==null || id == undefined) {
-            const result = await getRepository(Product).createQueryBuilder("product").getMany();
-            return res.status(200).json(result);
+            productsRepo = await getRepository(Product).createQueryBuilder("p");
         } else {
             id = id.toString();
-            const result = await getRepository(Product)
-                                .createQueryBuilder('p')
-                                .where('p.type_id = :id', {id})
-                                .orderBy('p.created_at', 'ASC')
-                                .getMany();
-            return res.status(200).json(result);
+            productsRepo = getRepository(Product).createQueryBuilder('p').where('p.type_id = :id', {id});
         }
+
+        switch (sort) {
+            case 'alph-AZ':
+                result =  await productsRepo.orderBy('p.title', 'ASC').getMany();
+                break;
+            case 'alph-ZA':
+                result =  await productsRepo.orderBy('p.title', 'DESC').getMany();
+                break;
+            case 'price-ASC':
+                result =  await productsRepo.orderBy('p.price', 'ASC').getMany();
+                break;
+            case 'price-DESC':
+                result =  await productsRepo.orderBy('p.price', 'DESC').getMany();
+                break;
+            case 'date-ASC':
+                result =  await productsRepo.orderBy('p.created_at', 'ASC').getMany();
+                break;
+            case 'date-DESC':
+                result =  await productsRepo.orderBy('p.created_at', 'DESC').getMany();
+                break;
+            default:
+                result =  await productsRepo.orderBy('p.created_at', 'ASC').getMany();
+                break;
+        }
+
+        return res.status(200).json(result);
     }
 
     static getOneProduct = async (req: Request, res: Response) => {
@@ -47,12 +71,19 @@ class ProductController {
             }
 
             const id = req.params.id;
-            let product = await getRepository(Product).findOne(id);
+            if(!id) {
+                res.status(400).send('required product ID')
+            }
+            let product = await getRepository(Product).findOneOrFail(id);
+            if(!product) {
+                res.status(404).send('Product not found');
+                return;
+            }
             let productPrice = product?.price;
             let prices = [
                 {
                     name: 'USD',
-                    price: productPrice
+                    price: productPrice?.toString()
                 },
                 {
                     name: 'GEL',
@@ -74,14 +105,24 @@ class ProductController {
     }
 
     static updateProduct = async (req: Request, res: Response) => {
-        const id = req.params.id;
-        const product = await getRepository(Product).findOne(id);
-        if (product) {
-            getRepository(Product).merge(product, req.body);
-            const result = await getRepository(Product).save(product);
-            return res.json(result);
+        const productId = Number(req.params.id);
+        const {title, typeId, price, about, materials, dimensions, careInstructions} = req.body
+        const product = await getRepository(Product).findOne(productId);
+        if(product) {
+            let updatedValues = {
+                title: title ? title : product.title,
+                typeId: typeId ? typeId : product.typeId,
+                price: Number(price) ? Number(price) : product.price,
+                about: about ? about : product.about,
+                materials: materials ? materials : product.materials,
+                dimensions: dimensions ? dimensions : product.dimensions,
+                careInstructions: careInstructions ? careInstructions : product.careInstructions
+            }
+            await getRepository(Product).update({productId}, updatedValues);
+            return res.status(200).json(updatedValues);
+        } else {
+            return res.status(404).send('Product not found');
         }
-        return res.json({message: 'Producti ver vipoveeeit'});
     }
 
     static deleteProduct = async (req: Request, res: Response) => {

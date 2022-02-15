@@ -50,8 +50,9 @@ createConnection()
         app.use('/cart', checkAuthenicated, cartRouter);
         
         // static types and all products api
-        app.get('/types', ProductController.getTypes)
+        app.get('/types', ProductController.getTypes);
         app.get('/products', ProductController.getProducts);
+        app.get('/products/:id', ProductController.getOneProduct);
 
         // swagger documentation for apis
         app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
