@@ -42,26 +42,31 @@ const generateString = () => {
     }
     return result;
 }
+// email validation
+const emailRegexp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
 
 class AuthController extends BaseEntity {
-    static login = async (req: Request, res: Response) => {
+    static login = async (req: any, res: any) => {
         const {email, password} = req.body;
         if(!(email&&password)) {
-            res.status(400).send('Reuires email and passwerd, both!')
+            return res.status(400).send('Reuires email and passwerd, both!')
+        }
+
+        if(!emailRegexp.test(email)) {
+            return res.status(400).send('Bad request: email is not valid')
         }
 
         const userRepository = getRepository(User);
         try {
             let user = await userRepository.findOne({email: email});
             if (user && !user.isValidPassword(password)) {
-                res.status(401).send('Incorrect password!')
-                return;
+                return res.status(401).send('Incorrect password!')
             }
             const payload = {
                 email: user?.email,
                 id: user?.id
             }
-            const token = jwt.sign(payload, 'secret', {expiresIn: '15m'})
+            const token = jwt.sign(payload, 'secret', {expiresIn: '30m'})
             res.cookie('session-token', token)
             res.status(200).json({token: token, userData: user});
         } catch (error) {
@@ -75,7 +80,7 @@ class AuthController extends BaseEntity {
         res.send('logout').redirect('/login')
     }
 
-    static register = async (req: Request, res: Response) => {
+    static register = async (req: any, res: any) => {
         const {firstName, lastName, userName, email, password} = req.body;
         let user = new User();
 
@@ -84,6 +89,10 @@ class AuthController extends BaseEntity {
         user.userName = userName;
         user.email = email;
         user.password = user.setPassword(password);
+
+        if(!emailRegexp.test(email)) {
+            return res.status(400).send('Bad request: email is not valid')
+        }
 
         const errors = await validate(user);
         if(errors.length > 0) {
@@ -114,27 +123,49 @@ class AuthController extends BaseEntity {
         res.status(201).json(user);
     }
 
-    static updateUser = async (req: Request, res: Response) => {
-        const {firstName, lastName, email, password} = req.body;
+    static updateUser = async (req: any, res: any) => {
+        const {firstName, lastName, userName, email} = req.body;
         const userRepository = getRepository(User);
+        
+        let token = req.cookies['session-token'];
+        if(!token) {
+            return res.status(401).send('U need authorization')
+        }
+        let oldEmail = Object(jwt.verify(token, 'secret')).email
+
         try {
-            let user = await userRepository.findOne({email: email});
-            if (user && !user.isValidPassword(password)) {
-                res.status(401).send('araswori password!')
-                return
+            let user = await userRepository.findOne({email: oldEmail});
+            let emailExists = await userRepository.findOne({email: email});
+            let userNameExists = await userRepository.findOne({userName: userName});
+
+            if(userNameExists) {
+                res.status(400).send('Account with this username already exists, try another');
+                return;
             }
-            if (firstName != '' && email != '' && lastName != '' && password != '') {
-                await getConnection()
-                    .createQueryBuilder()
-                    .update(User)
-                    .set({ firstName: firstName, lastName: lastName, email: email, password: bcrypt.hashSync(password, 8) })
-                    .where("email = :email", { email: email })
-                    .execute();
+
+            if(!emailRegexp.test(email) && email) {
+                return res.status(400).send('Bad request: email is not valid')
+            }
+            
+            if(emailExists) {
+                res.status(400).send('Email is already taken');
+                return;
+            }
+
+            if(user) {
+                let updatedValues = {
+                    firstName: firstName ? firstName : user.firstName,
+                    lastName: lastName ? lastName : user.lastName,
+                    userName: userName ? userName : user.userName,
+                    email: email ? email : user.email
+                }
+                await userRepository.update({email: oldEmail}, updatedValues)
+                return res.status(200).json(updatedValues)
             } else {
-                res.status(400).send('Empty fields')
+                res.status(409).send('Happened issue')
             }
         } catch (error) {
-            res.status(409).send('Some kind of error')
+            res.status(409).send('Happened issue')
         }
     }
 

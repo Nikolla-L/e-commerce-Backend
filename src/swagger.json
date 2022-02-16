@@ -341,6 +341,33 @@
                 }
             }
         },
+        "/auth/update": {
+            "put": {
+                "tags": ["Auth"],
+                "summary": "იუზერის ედიტირება",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/definitions/EditUser"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Failed. Bad put data."
+                    },
+                    "404": {
+                        "description": "Failed. User not found."
+                    }
+                }
+            }
+        },
         "/auth/list": {
             "get": {
                 "tags": ["Auth"],
@@ -566,6 +593,23 @@
                     "type": "string"
                 },
                 "confirmPassword": {
+                    "type": "string"
+                }
+            }
+        },
+        "EditUser" : {
+            "type": "object",
+            "properties": {
+                "firstName": {
+                    "type": "string"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "userName": {
+                    "type": "string"
+                },
+                "email": {
                     "type": "string"
                 }
             }

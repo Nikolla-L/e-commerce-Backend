@@ -27,6 +27,19 @@ class ProductController {
         
         if(id == '0' || id==null || id == undefined) {
             productsRepo = await getRepository(Product).createQueryBuilder("p");
+        } else if (id == 'bags') {
+            productsRepo = getRepository(Product)
+                            .createQueryBuilder('p')
+                            .where('p.type_id = :id', {id: 1 })
+                            .orWhere('p.type_id = :id', {id: 2})
+                            .orWhere('p.type_id = :id', {id: 3})
+                            .orWhere('p.type_id = :id', {id: 4})
+                            .orWhere('p.type_id = :id', {id: 5});
+        } else if (id == 'shoes') {
+            productsRepo = getRepository(Product)
+                            .createQueryBuilder('p')
+                            .where('p.type_id = :id', {id: 6})
+                            .orWhere('p.type_id = :id', {id: 7});
         } else {
             id = id.toString();
             productsRepo = getRepository(Product).createQueryBuilder('p').where('p.type_id = :id', {id});
@@ -133,6 +146,14 @@ class ProductController {
 
     static getTypes = async (req: Request, res: Response) => {
         const types = [
+            {
+                typeId: 'shoes',
+                typeName: 'Shoes'
+            },
+            {
+                typeId: 'bags',
+                typeName: 'Bags'
+            },
             {
                 typeId: 1, 
                 typeName: "Tote bags"
