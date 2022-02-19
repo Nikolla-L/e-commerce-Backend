@@ -1,18 +1,31 @@
 import { Request, Response } from 'express';
 import { CartProduct } from '../entity/CartProduct';
-import { BaseEntity } from 'typeorm';
-import { getRepository } from 'typeorm';
+import { BaseEntity, getRepository } from 'typeorm';
+import { User } from '../entity/User';
+import jwt from 'jsonwebtoken';
 
 
 class CartController extends BaseEntity {
-    static addProduct = async (req: Request, res: Response) => {
-        const newItem = {
-            productId: req.body.productId,
-            addedBy: req.body.userId
+    static getUserId = (req: any, res: any) => {
+        let token = req.cookies['session-token'];
+        if(!token) {
+            return res.status(401).send('U need authorization')
         }
+        return Object(jwt.verify(token, 'secret')).id
+    }
+    
+    static addProduct = async (req: Request, res: Response) => {
+        let userId = this.getUserId(req, res);
+        const {productId} = req.body
+
+        const newItem = {
+            productId: productId,
+            addedBy: userId
+        }
+
         const item = await getRepository(CartProduct).create(newItem);
         const result = await getRepository(CartProduct).save(item);
-        return res.json(result);
+        return res.status(200).send('product added to cart');
     }
 
     static getProducts = async (req: Request, res: Response) => {

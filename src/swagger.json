@@ -558,9 +558,6 @@
             "properties": {
                 "productId": {
                     "type": "string"
-                },
-                "userId": {
-                    "type": "string"
                 }
             }
         },
