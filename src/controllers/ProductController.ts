@@ -5,14 +5,24 @@ const request = require('request-promise');
 
 class ProductController {
     static postProduct = async (req: Request, res: Response) => {
+        const {title, typeId, price, about, materials, dimensions, careInstructions} = req.body
+        const types = ['1', '2', '3', '4', '5', '6', '7', 1, 2, 3, 4, 5, 6, 7, 'bags', 'shpoes']
+        if(!types.includes(typeId)) {
+            return res.status(400).send('Bad request: This type of product does not exist');
+        }
+        
+        if(title == '' || typeId == '' || price == '' || about == '' || dimensions == '' || careInstructions == '') {
+            return res.status(400).send('Bad request: All fields must be filled');
+        }
+
         const newProduct = {
-            title: req.body.title,
-            typeId: req.body.typeId,
-            price: Number(req.body.price),
-            about: req.body.about,
-            materials: req.body.materials,
-            dimensions: req.body.dimensions,
-            careInstructions: req.body.careInstructions
+            title: title,
+            typeId: typeId,
+            price: Number(price),
+            about: about,
+            materials: materials,
+            dimensions: dimensions,
+            careInstructions: careInstructions
         };
         const product = await getRepository(Product).create(newProduct);
         const result = await getRepository(Product).save(product);
@@ -119,8 +129,18 @@ class ProductController {
 
     static updateProduct = async (req: Request, res: Response) => {
         const productId = Number(req.params.id);
+        if(productId==null) {
+            return res.status(400).send('Bad Request: needs productId param');
+        }
         const {title, typeId, price, about, materials, dimensions, careInstructions} = req.body
-        const product = await getRepository(Product).findOne(productId);
+
+        const types = ['1', '2', '3', '4', '5', '6', '7', 1, 2, 3, 4, 5, 6, 7, 'bags', 'shpoes']
+        if(!types.includes(typeId) && typeId!=null && typeId!='') {
+            return res.status(400).send('Bad request: This type of product does not exist');
+        }
+        
+        const product = await getRepository(Product).findOne({productId: productId});
+
         if(product) {
             let updatedValues = {
                 title: title ? title : product.title,
@@ -131,7 +151,7 @@ class ProductController {
                 dimensions: dimensions ? dimensions : product.dimensions,
                 careInstructions: careInstructions ? careInstructions : product.careInstructions
             }
-            await getRepository(Product).update({productId}, updatedValues);
+            await getRepository(Product).update({productId: productId}, updatedValues);
             return res.status(200).json(updatedValues);
         } else {
             return res.status(404).send('Product not found');
@@ -140,8 +160,16 @@ class ProductController {
 
     static deleteProduct = async (req: Request, res: Response) => {
         const id = req.params.id;
-        const product = await getRepository(Product).delete(id);
-        return res.json(product);
+        if(id) {
+            try {
+                await getRepository(Product).delete(id);
+                return res.status(200).send('Product has been deleted');
+            } catch (error) {
+                return res.status(404).send('Product not found');
+            }
+        } else {
+            return res.status(400).send('Bad request: missing product Id');
+        }
     }
 
     static getTypes = async (req: Request, res: Response) => {
