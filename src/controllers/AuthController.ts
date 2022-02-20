@@ -59,6 +59,9 @@ class AuthController extends BaseEntity {
         const userRepository = getRepository(User);
         try {
             let user = await userRepository.findOne({email: email});
+            if(!user) {
+                return res.status(404).send('User not found')
+            }
             if (user && !user.isValidPassword(password)) {
                 return res.status(401).send('Incorrect password!')
             }
