@@ -13,9 +13,16 @@ export class CartProduct {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @ManyToOne(()=>Product, productId => productId.productId)
-    @JoinColumn()
+    @Column({
+        name: 'product_id'
+    })
     productId: number;
+
+    @Column({
+        default: 1,
+        nullable: true
+    })
+    number: number;
 
     @Column({
         name: 'added_by'

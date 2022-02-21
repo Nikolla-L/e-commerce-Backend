@@ -404,18 +404,10 @@
                 }
             }
         }, 
-        "/cart/": {
+        "/cart": {
             "get": {
                 "tags": ["Cart"],
                 "summary": "ქარტში დამატებული ყველა პროდუქტის მიღება",
-                "parameters": [
-                    {
-                        "name": "userId",
-                        "in": "path",
-                        "required": true,
-                        "description": "დამმატებელი იუზერის Id (current user Id)"
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "A successful response"
@@ -461,7 +453,7 @@
                         "name": "id",
                         "in": "path",
                         "required": true,
-                        "description": "Id of single cart product"
+                        "description": "Id of single cart product (არ იგულისხმება productId, ჩისტად Id)"
                     }
                 ],
                 "responses": {
@@ -470,6 +462,46 @@
                     },
                     "400": {
                         "description": "Failed, cart product not found"
+                    },
+                    "404": {
+                        "description": "Bad request"
+                    }
+                }
+            },
+            "put": {
+                "tags": ["Cart"],
+                "summary": "ქარტის პროდუქტის ედიტირება Id-ით",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "Id of single cart product (არ იგულისხმება productId, ჩისტად Id)"
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "requestBody": {
+                    "description": "Product object",
+                    "required": false,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref":"#/definitions/CartProduct"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "A successfully deleted"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Product not found"
                     }
                 }
             },
@@ -481,7 +513,7 @@
                         "name": "id",
                         "in": "path",
                         "required": true,
-                        "description": "Id of single cart product"
+                        "description": "Id of single cart product (არ იგულისხმება productId, ჩისტად Id)"
                     }
                 ],
                 "responses": {
@@ -489,7 +521,10 @@
                         "description": "A successfully deleted"
                     },
                     "400": {
-                        "description": "Failed"
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Product not found"
                     }
                 }
             }
@@ -558,6 +593,9 @@
             "properties": {
                 "productId": {
                     "type": "string"
+                },
+                "number": {
+                    "type": "number"
                 }
             }
         },

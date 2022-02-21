@@ -5,6 +5,7 @@ const router = express.Router({mergeParams : true});
 
 router.post('/', CartController.addProduct);
 router.get('/', CartController.getProducts);
+router.get('/:id', CartController.getOneProduct);
 router.delete('/:id', CartController.removeProduct);
 router.put('/:id', CartController.editProduct);
 
