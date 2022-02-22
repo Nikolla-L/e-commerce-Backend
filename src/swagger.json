@@ -314,17 +314,17 @@
                 }
             }
         },
-        "/auth/reset-password": {
+        
+        "/auth/update": {
             "put": {
                 "tags": ["Auth"],
-                "summary": "პაროლის აღდგენა (დარესეტება)",
+                "summary": "იუზერის ედიტირება",
                 "requestBody": {
-                    "description": "ითხოვს იმეილს, კოდს და ბოლოს პაროლების შეყვანას. ფრონტში უნდა მოხდეს სტეპებად: ჯერ იმეილი და კოდი. კოდიდან დადებითი სტატუსის შემთხვევაში კი გამოაჩინოს პაროლის და პაროლის აღდგენის ინფუთები",
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/definitions/ResetPassword"
+                                "$ref": "#/definitions/EditUser"
                             }
                         }
                     }
@@ -342,16 +342,17 @@
                 }
             }
         },
-        "/auth/update": {
+        "/auth/reset-password": {
             "put": {
                 "tags": ["Auth"],
-                "summary": "იუზერის ედიტირება",
+                "summary": "პაროლის აღდგენა (დარესეტება)",
                 "requestBody": {
+                    "description": "ითხოვს იმეილს, კოდს და ბოლოს პაროლების შეყვანას. ფრონტში უნდა მოხდეს სტეპებად: ჯერ იმეილი და კოდი. კოდიდან დადებითი სტატუსის შემთხვევაში კი გამოაჩინოს პაროლის და პაროლის აღდგენის ინფუთები",
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/definitions/EditUser"
+                                "$ref": "#/definitions/ResetPassword"
                             }
                         }
                     }
