@@ -16,11 +16,15 @@ class CartController extends BaseEntity {
     
     static addProduct = async (req: Request, res: Response) => {
         let userId = this.getUserId(req, res);
-        const {productId, number} = req.body
+        const {productId, number} = req.body;
+
+        if (productId == '' || number == '' || productId == null || number == null) {
+            return res.status(400).send('Bad request: Please insert both - productId and number of products');
+        }
 
         let product = await getRepository(Product).findOne({productId: productId});
         if(!product) {
-            return res.status(404).send('Product not found with this ID!')
+            return res.status(404).send('Product not found with this ID!');
         }
 
         const newItem = {
@@ -63,12 +67,12 @@ class CartController extends BaseEntity {
                 let productId = cartProduct?.productId;
                 let product = await getRepository(Product).findOne({productId: productId});
                 cartProduct = Object.assign(cartProduct, {productData: product})
-                res.status(200).json(cartProduct)
+                return res.status(200).json(cartProduct)
             } catch (error) {
-                res.status(404).send('Cart product not found with this Id')
+                return res.status(404).send('Cart product not found with this Id')
             }
         } else {
-            res.status(400).send('Bad request: cart product Id is missing!');
+            return res.status(400).send('Bad request: cart product Id is missing!');
         }
     }
 
@@ -107,7 +111,7 @@ class CartController extends BaseEntity {
                 return res.status(404).send('Cart product not found with this Id');
             }
         } else {
-            res.status(400).send('Bad request: cart product Id is missing!');
+            return res.status(400).send('Bad request: cart product Id is missing!');
         }
     }
 }
