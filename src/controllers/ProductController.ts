@@ -4,16 +4,21 @@ import { Product } from '../entity/Product';
 const request = require('request-promise');
 
 class ProductController {
-    static postProduct = async (req: Request, res: Response) => {
+    static postProduct = async (req: Request, res: any) => {
         const {title, typeId, price, about, materials, dimensions, careInstructions} = req.body
         const types = ['1', '2', '3', '4', '5', '6', '7', 1, 2, 3, 4, 5, 6, 7, 'bags', 'shpoes']
+        
+        if(
+            title == '' || typeId == '' || price == '' || about == '' || dimensions == '' || careInstructions == '' ||
+            title == null || typeId == null || price == null || about == null || dimensions == null || careInstructions == null
+        ) {
+            return res.status(400).send('Bad request: All fields must be filled');
+        }
+
         if(!types.includes(typeId)) {
             return res.status(400).send('Bad request: This type of product does not exist');
         }
         
-        if(title == '' || typeId == '' || price == '' || about == '' || dimensions == '' || careInstructions == '') {
-            return res.status(400).send('Bad request: All fields must be filled');
-        }
 
         const newProduct = {
             title: title,
@@ -35,7 +40,7 @@ class ProductController {
         let productsRepo: any = '';
         let result: any = [];
         
-        if(id == '0' || id==null || id == undefined) {
+        if(id == '0' || id==null) {
             productsRepo = await getRepository(Product).createQueryBuilder("p");
         } else if (id == 'bags') {
             productsRepo = getRepository(Product)
