@@ -172,9 +172,9 @@ class AuthController extends BaseEntity {
     static getAllUsers = async (req: Request, res: Response) => {
         try {
             const result = await getRepository(User).createQueryBuilder('user').getMany();
-            res.status(200).json(result);
+            return res.status(200).json(result);
         } catch (error) {
-            res.status(400).send('Bad request');
+            return res.status(400).send('Bad request');
         }
     }
 

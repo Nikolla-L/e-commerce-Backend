@@ -8,6 +8,7 @@ import jwt from 'jsonwebtoken';
 import productRouter from "./routes/productRoutes";
 import authRouter from "./routes/authRoutes";
 import cartRouter from './routes/cartRoutes';
+import subscribeRouter from './routes/subscribeRoutes';
 import swaggerUi from 'swagger-ui-express' 
 import swaggerDocs from './swagger.json'
 import fileUpload from "express-fileupload";
@@ -50,6 +51,7 @@ createConnection()
         }));
 
         app.use('/auth', authRouter);
+        app.use('/sub', subscribeRouter);
         app.use('/product', checkAuthenicated, productRouter);
         app.use('/cart', checkAuthenicated, cartRouter);
         

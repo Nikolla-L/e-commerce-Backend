@@ -21,6 +21,10 @@
             "description": "API for login&auth"
         },
         {
+            "name": "Sub",
+            "description": "API for subscribe actions"
+        },
+        {
             "name": "Product",
             "description": "API for product actions"
         },
@@ -37,6 +41,69 @@
                 "responses": {
                     "200": {
                         "description": "A successful response"
+                    }
+                }
+            }
+        },
+        "/sub": {
+            "get": {
+                "tags":["Sub"],
+                "summary": "გამომწერთა იმეილების სიის მიღება",
+                "responses": {
+                    "200": {
+                        "description": "A successful response"
+                    }
+                }
+            },
+            "post": {
+                "tags":["Sub"],
+                "summary": "გამოწერა",
+                "produces": [
+                    "application/json"
+                ],
+                "description": "გამომწერი იმეილის დამატება",
+                "requestBody": {
+                    "description": "email",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref":"#/definitions/Subscriber"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Failed, Bad request"
+                    }
+                }
+            }
+        },
+        "/sub/{id}": {
+            "delete": {
+                "tags":["Sub"],
+                "summary": "გამომწერის წაშლა Id-ით",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "Id of subscriber's email"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successfully deleted"
+                    },
+                    "400": {
+                        "description": "Failed"
+                    },
+                    "404": {
+                        "description": "Bad Request"
                     }
                 }
             }
@@ -561,6 +628,14 @@
                     "type": "string"
                 },
                 "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "Subscriber": {
+            "type": "object",
+            "properties": {
+                "email": {
                     "type": "string"
                 }
             }
