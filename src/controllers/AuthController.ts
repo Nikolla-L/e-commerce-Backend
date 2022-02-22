@@ -7,9 +7,7 @@ import jwt from 'jsonwebtoken';
 const nodemailer = require("nodemailer");
 const {OAuth2Client} = require('google-auth-library');
 
-const googleClient = new OAuth2Client({
-    clientId:`1068850605287-o1pignk020ft6da6c5ijovube2km1k49.apps.googleusercontent.com`
-});
+const googleClient = new OAuth2Client(`1068850605287-o1pignk020ft6da6c5ijovube2km1k49.apps.googleusercontent.com`);
 
 const sendMail = async (email: string, code: string) => {
     let transporter = await nodemailer.createTransport({
@@ -79,7 +77,6 @@ class AuthController extends BaseEntity {
 
     static logout = async (req: Request, res: Response) => {
         res.clearCookie('session-token')
-        res.clearCookie('access_token')
         res.send('logout').redirect('/login')
     }
 
@@ -237,27 +234,33 @@ class AuthController extends BaseEntity {
         }
     }
       
-    static googleAuth = async (req: Request, res: Response) => {
-        const { token } = req.body;
-      
+    static googleAuth = async (req: any, res: any) => {
+        const {token} = req.body
+
         const ticket = await googleClient.verifyIdToken({
-          idToken: token,
-          audient: `1068850605287-o1pignk020ft6da6c5ijovube2km1k49.apps.googleusercontent.com`,
+            idToken: token,
+            audience: `1068850605287-o1pignk020ft6da6c5ijovube2km1k49.apps.googleusercontent.com`
         });
-      
-        const payload = ticket.getPayload();
-      
-        let user = await getRepository(User).findOne({email: payload?.email});
-        if (!user) {
-          let user = new User();
-          user.email = payload?.email;
-          user.firstName = payload?.name
-      
-          await getRepository(User).save(user);
+
+        const payload = await ticket.getPayload();
+        let user = await getRepository(User).findOneOrFail({email: payload?.email})
+
+        if(!user) {
+            res.status(404).send('User does not exist, please register at first')
         }
-      
-        res.status(200).json({ user, token });
-    };
+
+        try {
+            const p = {
+                email: user?.email,
+                id: user?.id
+            }
+            const t = jwt.sign(p, 'secret', {expiresIn: '30m'})
+            res.cookie('session-token', t);
+            res.status(200).json({user: payload, userData: user})
+        } catch (error) {
+            res.status(400).send('Bad request')
+        }
+    }
 }
 
 export default AuthController;

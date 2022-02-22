@@ -258,6 +258,7 @@
                 "produces": [
                     "application/json"
                 ],
+                "description": "ამ როუტთან მამენტ არ გიწევთ შეხება რადგან რეაქთის კომპონენტშია უკვე ჩასმული",
                 "requestBody": {
                     "required": true,
                     "content": {

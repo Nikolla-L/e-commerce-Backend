@@ -19,7 +19,7 @@ const checkAuthenicated = (req: any, res: any, next: NextFunction) => {
     let token = req.cookies['session-token'];
 
     if (!token) {
-        return res.status(401).send("U need authentication");
+        res.status(401).send('You are not authorized!')
     }
 
     const verify = async () => {
@@ -36,7 +36,11 @@ const checkAuthenicated = (req: any, res: any, next: NextFunction) => {
 createConnection()
     .then(async connection => {
         const app = express();
-        app.use(cors())
+        app.use(cors({
+            origin: ["http://localhost:3000", '*'],
+            methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+            credentials: true,
+        }))
         app.use(BodyParser.urlencoded({ extended: false }))
         app.use(BodyParser.json())
         app.use(cookieParser())
