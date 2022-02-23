@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { Email } from '../entity/Email';
 import { BaseEntity, getRepository } from 'typeorm';
-
+import { sendWelcome } from '../service/Mailer';
 
 // email validation
 const emailRegexp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
@@ -27,7 +27,10 @@ class SubscribeController extends BaseEntity {
         } catch (error) {
             return res.status(400).send('Ops... occured some issue. Please try later');
         }
-        return res.status(200).send('Success');
+        
+        sendWelcome(email)
+        .then(() => res.status(200).send('Success'))
+        .catch(error => res.status(400).send('Ops... occured issue, please try later'))
     }
 
     static getEmails = async (req: Request, res: Response) => {

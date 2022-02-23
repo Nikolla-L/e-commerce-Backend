@@ -2,34 +2,12 @@ import { NextFunction, Request, Response } from 'express';
 import { User } from '../entity/User';
 import { BaseEntity, getRepository, getConnection } from 'typeorm';
 import { validate } from 'class-validator';
+import { sendCode } from '../service/Mailer';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-const nodemailer = require("nodemailer");
 const {OAuth2Client} = require('google-auth-library');
-
 const googleClient = new OAuth2Client(`1068850605287-o1pignk020ft6da6c5ijovube2km1k49.apps.googleusercontent.com`);
 
-const sendMail = async (email: string, code: string) => {
-    let transporter = await nodemailer.createTransport({
-        service: 'Gmail',
-        auth: {
-            user: 'eCommerseTeam@gmail.com',
-            pass: 'kuzanovi0000'
-        }, 
-        tls:{
-            rejectUnauthorized:false
-        }
-    }); 
-    let info = await transporter.sendMail({
-        from: '"e_commerse" <eCommerseTeam@gmail.com>',
-        to: email,
-        subject: "mailer testing", 
-        html: `<p>ერთჯერადი კოდია: <span style='color:red'>${code}</span>;</p>`,
-    });
-  
-    console.log("Message sent: %s", info.messageId);
-    console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-}
 // function to generater random numbers string
 const generateString = () => {
     var result = '';
@@ -183,7 +161,7 @@ class AuthController extends BaseEntity {
         let user = await getRepository(User).findOne({email: email});
         if(user) {
             let code = generateString();
-            sendMail(email, code).then(()=>{
+            sendCode(email, code).then(()=>{
                 getConnection()
                 .createQueryBuilder()
                 .update(User)

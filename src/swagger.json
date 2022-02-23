@@ -21,7 +21,7 @@
             "description": "API for login&auth"
         },
         {
-            "name": "Sub",
+            "name": "Subscribe",
             "description": "API for subscribe actions"
         },
         {
@@ -47,7 +47,7 @@
         },
         "/sub": {
             "get": {
-                "tags":["Sub"],
+                "tags":["Subscribe"],
                 "summary": "გამომწერთა იმეილების სიის მიღება",
                 "responses": {
                     "200": {
@@ -56,7 +56,7 @@
                 }
             },
             "post": {
-                "tags":["Sub"],
+                "tags":["Subscribe"],
                 "summary": "გამოწერა",
                 "produces": [
                     "application/json"
@@ -85,7 +85,7 @@
         },
         "/sub/{id}": {
             "delete": {
-                "tags":["Sub"],
+                "tags":["Subscribe"],
                 "summary": "გამომწერის წაშლა Id-ით",
                 "parameters": [
                     {

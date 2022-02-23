@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import { getRepository } from 'typeorm';
 import { Product } from '../entity/Product';
+import { Email } from '../entity/Email';
+import { sendNews } from '../service/Mailer';
 const request = require('request-promise');
 
 class ProductController {
@@ -19,7 +21,6 @@ class ProductController {
             return res.status(400).send('Bad request: This type of product does not exist');
         }
         
-
         const newProduct = {
             title: title,
             typeId: typeId,
@@ -31,7 +32,13 @@ class ProductController {
         };
         const product = await getRepository(Product).create(newProduct);
         const result = await getRepository(Product).save(product);
-        return res.json(result);
+
+        let emails = await getRepository(Email).createQueryBuilder('email').getMany();
+        let array = Array.from(emails)?.map(obj => obj?.email);
+        
+        sendNews(array)
+        .then(() => res.status(200).json(result))
+        .catch(error => res.status(400).send('Ops... occured issue, please try later'));
     }
 
     static getProducts = async (req: Request, res: Response) => {
