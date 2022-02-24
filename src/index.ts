@@ -19,11 +19,7 @@ let port = process.env.PORT || 3001;
 createConnection()
     .then(async connection => {
         const app = express();
-        app.use(cors({
-            origin: ["http://localhost:3000", 'https://levani.d2xzaaged6xhtu.amplifyapp.com', '*'],
-            methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-            credentials: true,
-        }))
+        app.use(cors())
         app.use(BodyParser.urlencoded({ extended: false }))
         app.use(BodyParser.json())
         app.use(cookieParser())
