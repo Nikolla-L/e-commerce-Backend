@@ -21,7 +21,6 @@ createConnection()
         const app = express();
         app.use(cors({
             origin: '*',
-            methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
             credentials: true,
         }))
         app.use(BodyParser.urlencoded({ extended: false }))
