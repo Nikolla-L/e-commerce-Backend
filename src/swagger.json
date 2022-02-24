@@ -2,7 +2,7 @@
     "openapi": "3.0.0",
     "info": {
         "version": "1.0.0",
-        "title": "ძირითადი URL არის  ...",
+        "title": "ძირითადი URL არის http://node-env-1.eba-npp53eyx.us-east-1.elasticbeanstalk.com/",
         "description": "E-commerse project with nodeJs & TypeORM"
     },
     "servers": [
