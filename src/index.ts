@@ -34,8 +34,8 @@ createConnection()
 
         app.use('/auth', authRouter);
         app.use('/sub', subscribeRouter);
-        app.use('/product',/* checkAuthenicated,*/ productRouter);
-        app.use('/cart', /*checkAuthenicated,*/ cartRouter);
+        app.use('/product', checkAuthenicated, productRouter);
+        app.use('/cart', checkAuthenicated, cartRouter);
         
         // static types and all products api
         app.get('/types', ProductController.getTypes);
