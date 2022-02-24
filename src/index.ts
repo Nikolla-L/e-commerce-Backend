@@ -19,17 +19,11 @@ let port = process.env.PORT || 3001;
 createConnection()
     .then(async connection => {
         const app = express();
-        var whitelist = ["http://localhost:3000", "https://levani.d2xzaaged6xhtu.amplifyapp.com/login"]
-        var corsOptions = {
-        origin: (origin: any, callback: any) => {
-            if (whitelist.indexOf(origin) !== -1) {
-                callback(null, true)
-            } else {
-                callback(new Error('Not allowed by CORS'))
-            }
-        }
-        }
-        app.use(cors(corsOptions))
+        app.use(cors({
+            origin: ["http://localhost:3000", "https://levani.d2xzaaged6xhtu.amplifyapp.com/login"],
+            methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+            credentials: true,
+        }))
         app.use(BodyParser.urlencoded({ extended: false }))
         app.use(BodyParser.json())
         app.use(cookieParser())
