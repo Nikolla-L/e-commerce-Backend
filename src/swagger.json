@@ -2,7 +2,7 @@
     "openapi": "3.0.0",
     "info": {
         "version": "1.0.0",
-        "title": "ძირითადი URL არის https://ecommerse--watamasheba.herokuapp.com/",
+        "title": "ძირითადი URL არის  ...",
         "description": "E-commerse project with nodeJs & TypeORM"
     },
     "servers": [
