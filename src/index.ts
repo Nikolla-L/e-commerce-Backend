@@ -19,20 +19,11 @@ let port = process.env.PORT || 3001;
 createConnection()
     .then(async connection => {
         const app = express();
-        // app.use(cors({
-        //     origin: ["http://localhost:3000"],
-        //     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-        //     credentials: true,
-        // }))
-        app.set('trust proxy', true) 
-
-// allow cors
-        const corsOptions: any = {
-        'origin': true,
-        'credentials': true,
-        }
-        // app.options('*', cors(corsOptions))
-        app.use(cors(corsOptions))
+        app.use(cors({
+            origin: ["http://localhost:3000", '*'],
+            methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+            credentials: true,
+        }))
         app.use(BodyParser.urlencoded({ extended: false }))
         app.use(BodyParser.json())
         app.use(cookieParser())
@@ -43,8 +34,8 @@ createConnection()
 
         app.use('/auth', authRouter);
         app.use('/sub', subscribeRouter);
-        app.use('/product', checkAuthenicated, productRouter);
-        app.use('/cart', checkAuthenicated, cartRouter);
+        app.use('/product',/* checkAuthenicated,*/ productRouter);
+        app.use('/cart', /*checkAuthenicated,*/ cartRouter);
         
         // static types and all products api
         app.get('/types', ProductController.getTypes);
