@@ -23,6 +23,9 @@ export class Product {
     @Column()
     price: number;
 
+    @Column()
+    color: string;
+
     @Column({
         nullable: true
     })

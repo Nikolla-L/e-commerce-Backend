@@ -159,6 +159,9 @@ class AuthController extends BaseEntity {
     static sendMail = async (req: Request, res: any) => {
         const {email} = req.body;
         let user = await getRepository(User).findOne({email: email});
+        if(!emailRegexp.test(email) && email) {
+            return res.status(400).send('Bad request: email is not valid');
+        }
         if(user) {
             let code = generateString();
             sendCode(email, code).then(()=>{
@@ -169,9 +172,7 @@ class AuthController extends BaseEntity {
                 .where("email = :email", { email: email })
                 .execute();
                 return res.status(200).send('Code has been send');
-            }).catch(e => {
-                return res.status(400).send('Bad request');
-            })
+            }).catch(e => res.status(400).send('Bad request'));
         } else {
             return res.status(404).send('User was not found');
         }

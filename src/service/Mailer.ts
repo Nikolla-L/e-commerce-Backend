@@ -23,7 +23,7 @@ export const sendWelcome = async (email: string) => {
 export const sendNews = async (emails: Array<string>) => {
     await transporter.sendMail({
         from: '"e_commerse" <eCommerseTeam@gmail.com>',
-        to: emails,
+        to: ['eCommerseTeam@gmail.com', ...emails],
         subject: "Check out new product", 
         html: `<p>დაათვალიერეთ ახალი პროდუქტი ჩვენს ვებ-გვერდზე</p>`,
     });
@@ -36,4 +36,13 @@ export const sendCode = async (email: string, code: string) => {
         subject: "password reset code", 
         html: `<p>ერთჯერადი კოდია: <span style='color:red'>${code}</span>;</p>`,
     });
+}
+
+export const sendPassword = async (email: string, password: string) => {
+    await transporter.sendMail({
+        from: '"e_commerse" <eCommerseTeam@gmail.com>',
+        to: email,
+        subject: "Forget Password",
+        html: `<p>თქვენი პაროლია: <span style='font-weight: bolder'>${password}}</span></p>`
+    })
 }

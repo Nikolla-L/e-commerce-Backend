@@ -72,7 +72,7 @@ export class User {
             {
                 email: this.email
             },
-            'SECRET',
+            'secret',
             {
                 expiresIn: '30min'
             }

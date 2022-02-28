@@ -9,10 +9,10 @@ import authRouter from "./routes/authRoutes";
 import cartRouter from './routes/cartRoutes';
 import subscribeRouter from './routes/subscribeRoutes';
 import ProductController from './controllers/ProductController';
-import swaggerUi from 'swagger-ui-express' 
-import swaggerDocs from './swagger.json'
+import swaggerUi from 'swagger-ui-express';
+import swaggerDocs from './swagger.json';
 import fileUpload from "express-fileupload";
-import { checkAuthenicated } from './middleware/CheckAuth'
+import { checkAuthenicated } from './middleware/CheckAuth';
 
 let port = process.env.PORT || 3001;
 
@@ -38,6 +38,7 @@ createConnection()
         app.use('/cart', checkAuthenicated, cartRouter);
         
         // static types and all products api
+        app.get('/colors', ProductController.getColors)
         app.get('/types', ProductController.getTypes);
         app.get('/products', ProductController.getProducts);
         app.get('/products/:id', ProductController.getOneProduct);

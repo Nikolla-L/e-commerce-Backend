@@ -11,7 +11,7 @@ router.delete("/:id", ProductController.deleteProduct);
 
 // --- droebit ---
 router.get("/files/upload", (req: any, res: any)=>{
-    res.send(`<form action="https://ecommerse--watamasheba.herokuapp.com/product/files/upload" method="post" enctype="multipart/form-data">
+    res.send(`<form action="http://node-env-1.eba-npp53eyx.us-east-1.elasticbeanstalk.com/product/files/upload" method="post" enctype="multipart/form-data">
     <label>
       <input name="ატვირთვა" type="file" multiple> 
     </label>  
@@ -50,9 +50,9 @@ router.get("/files/:id", async (req: any, res: any) =>{
         console.log(result_find);
         var fileData = result_find.data
         res.writeHead(200, {
-        'Content-Type': result_find.mimeType,
-        'Content-Disposition': 'attachment; filename=' + result_find.name,
-        'Content-Length': fileData.length
+            'Content-Type': result_find.mimeType,
+            'Content-Disposition': 'attachment; filename=' + result_find.name,
+            'Content-Length': fileData.length
         });
         res.write(fileData);
         res.send();

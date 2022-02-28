@@ -7,12 +7,13 @@ const request = require('request-promise');
 
 class ProductController {
     static postProduct = async (req: Request, res: any) => {
-        const {title, typeId, price, about, materials, dimensions, careInstructions} = req.body
-        const types = ['1', '2', '3', '4', '5', '6', '7', 1, 2, 3, 4, 5, 6, 7, 'bags', 'shpoes']
+        const {title, typeId, price, color, about, materials, dimensions, careInstructions} = req.body;
+        const types = ['1', '2', '3', '4', '5', '6', '7', 1, 2, 3, 4, 5, 6, 7, 'bags', 'shpoes'];
+        const colors = ["blue", "black", "red", "white", "purple", "yellow", "green", "orange", "gray", "violet"];
         
         if(
-            title == '' || typeId == '' || price == '' || about == '' || dimensions == '' || careInstructions == '' ||
-            title == null || typeId == null || price == null || about == null || dimensions == null || careInstructions == null
+            title == '' || typeId == '' || price == '' || color == '' || about == '' || dimensions == '' || careInstructions == '' ||
+            title == null || typeId == null || price == null || color == null || about == null || dimensions == null || careInstructions == null
         ) {
             return res.status(400).send('Bad request: All fields must be filled');
         }
@@ -20,11 +21,16 @@ class ProductController {
         if(!types.includes(typeId)) {
             return res.status(400).send('Bad request: This type of product does not exist');
         }
+
+        if(!colors.includes(color)) {
+            return res.status(400).send('Bad request: This color of product does not exist ');
+        }
         
         const newProduct = {
             title: title,
             typeId: typeId,
             price: Number(price),
+            color: color,
             about: about,
             materials: materials,
             dimensions: dimensions,
@@ -42,29 +48,37 @@ class ProductController {
     }
 
     static getProducts = async (req: Request, res: Response) => {
-        let id = req.query.id;
+        let { typeId, color, priceFrom, priceTo } = req.query;
         let sort = req.query.sort;
         let productsRepo: any = '';
         let result: any = [];
         
-        if(id == '0' || id==null) {
+        if(typeId == '0' || typeId == null) {
             productsRepo = await getRepository(Product).createQueryBuilder("p");
-        } else if (id == 'bags') {
+        } else if (typeId == 'bags') {
             productsRepo = getRepository(Product)
                             .createQueryBuilder('p')
-                            .where('p.type_id = :id', {id: 1 })
-                            .orWhere('p.type_id = :id', {id: 2})
-                            .orWhere('p.type_id = :id', {id: 3})
-                            .orWhere('p.type_id = :id', {id: 4})
-                            .orWhere('p.type_id = :id', {id: 5});
-        } else if (id == 'shoes') {
+                            .where('p.type_id = :typeId', {typeId: 1 })
+                            .orWhere('p.type_id = :typeId', {typeId: 2})
+                            .orWhere('p.type_id = :typeId', {typeId: 3})
+                            .orWhere('p.type_id = :typeId', {typeId: 4})
+                            .orWhere('p.type_id = :typeId', {typeId: 5});
+        } else if (typeId == 'shoes') {
             productsRepo = getRepository(Product)
                             .createQueryBuilder('p')
-                            .where('p.type_id = :id', {id: 6})
-                            .orWhere('p.type_id = :id', {id: 7});
+                            .where('p.type_id = :typeId', {typeId: 6})
+                            .orWhere('p.type_id = :typeId', {typeId: 7});
         } else {
-            id = id.toString();
-            productsRepo = getRepository(Product).createQueryBuilder('p').where('p.type_id = :id', {id});
+            typeId = typeId.toString();
+            productsRepo = getRepository(Product).createQueryBuilder('p').where('p.type_id = :typeId', {typeId});
+        }
+
+        if(color) {
+            productsRepo = productsRepo.andWhere('p.color = :color', {color});
+        }
+
+        if(priceFrom != null && priceTo != null) {
+            productsRepo = productsRepo.andWhere('"price" BETWEEN :priceFrom AND :priceTo', {priceFrom: priceFrom, priceTo: priceTo});
         }
 
         switch (sort) {
@@ -144,11 +158,15 @@ class ProductController {
         if(productId==null) {
             return res.status(400).send('Bad Request: needs productId param');
         }
-        const {title, typeId, price, about, materials, dimensions, careInstructions} = req.body
+        const {title, typeId, price, color, about, materials, dimensions, careInstructions} = req.body
 
         const types = ['1', '2', '3', '4', '5', '6', '7', 1, 2, 3, 4, 5, 6, 7, 'bags', 'shpoes']
+        const colors = ["blue", "black", "red", "white", "purple", "yellow", "green", "orange", "gray", "violet"];
         if(!types.includes(typeId) && typeId!=null && typeId!='') {
             return res.status(400).send('Bad request: This type of product does not exist');
+        }
+        if(!colors.includes(color) && color!=null && color!='') {
+            return res.status(400).send('Bad request: This color of product does not exist ');
         }
         
         const product = await getRepository(Product).findOne({productId: productId});
@@ -158,6 +176,7 @@ class ProductController {
                 title: title ? title : product.title,
                 typeId: typeId ? typeId : product.typeId,
                 price: Number(price) ? Number(price) : product.price,
+                color: color ? color : product.color,
                 about: about ? about : product.about,
                 materials: materials ? materials : product.materials,
                 dimensions: dimensions ? dimensions : product.dimensions,
@@ -182,6 +201,11 @@ class ProductController {
         } else {
             return res.status(400).send('Bad request: missing product Id');
         }
+    }
+
+    static getColors = async (req: Request, res: Response) => {
+        const colors = ["blue", "black", "red", "white", "purple", "yellow", "green", "orange", "gray", "violet"];
+        return res.status(200).json(colors);
     }
 
     static getTypes = async (req: Request, res: Response) => {
@@ -223,7 +247,7 @@ class ProductController {
                 typeName: "Boots"
             }
         ]
-        return res.json(types)
+        return res.status(200).json(types)
     }
 }
 export default ProductController;
