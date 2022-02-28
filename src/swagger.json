@@ -7,8 +7,7 @@
     },
     "servers": [
         {
-            "url": "/",
-            "description": "ლოკალური სერვერი ან ჰეროკუ"
+            "url": "/"
         },
         {
             "url": "/api/",
@@ -38,6 +37,18 @@
             "get": {
                 "tags":["Product"],
                 "summary": "პროდუქტის ტიპების Id-ების დათვალიერება",
+                "responses": {
+                    "200": {
+                        "description": "A successful response"
+                    }
+                }
+            }
+        },
+        "/colors": {
+            "get": {
+                "tags":["Product"],
+                "summary": "პროდუქტის შესაძლო ფერების დათვალიერება",
+                "description": "მხოლოდ ამ ფერებითაა შესაძლებელი პროდუქტების დამატება და რედაქტირება, შესაბამისად ყველა პროდუქტის მიღებისას - გაფილტვრაც",
                 "responses": {
                     "200": {
                         "description": "A successful response"
@@ -114,22 +125,34 @@
                 "summary": "ყველა პროდუქტის მიღება",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "typeId",
                         "in": "query",
                         "required": false,
-                        "description": "პროდუქტის ტიპის მითითება (იგულისხმება ტიპები რომლებიც მაღლა როუტში მოიცემა)",
-                        "schema": {
-                            "$ref": "#/definitions/id"
-                        }
+                        "description": "პროდუქტის ტიპის მითითება (იგულისხმება ტიპები რომლებიც მაღლა როუტში მოიცემა)"
+                    },
+                    {
+                        "name": "color",
+                        "in": "query",
+                        "required": false,
+                        "description": "პროდუქტის ფერი"
                     },
                     {
                         "name": "sort",
                         "in": "query",
                         "required": false,
-                        "description": "პროდუქტების სორტირების ტიპების მითითება: ალფავიტი(alph-AZ, alph-ZA), ღირებულება(price-ASC, price-DESC), დამატების თარიღი(date-ASC, date-DESC)",
-                        "schema": {
-                            "$ref": "#/definitions/sort"
-                        }
+                        "description": "პროდუქტების სორტირების ტიპების მითითება: ალფავიტი(alph-AZ, alph-ZA), ღირებულება(price-ASC, price-DESC), დამატების თარიღი(date-ASC, date-DESC)"
+                    },
+                    {
+                        "name": "priceFrom",
+                        "in": "query",
+                        "required": false,
+                        "description": "-დან, ფასით პროდუქტების ფილტრი"
+                    },
+                    {
+                        "name": "priceTo",
+                        "in": "query",
+                        "required": false,
+                        "description": "-მდე, ფასით პროდუქტების ფილტრი"
                     }
                 ],
                 "responses": {
@@ -376,7 +399,7 @@
                         "description": "Bad request"
                     },
                     "404": {
-                        "description": "Not found"
+                        "description": "User not found"
                     }
                 }
             }
@@ -651,6 +674,9 @@
                 },
                 "price": {
                     "type": "number"
+                },
+                "color": {
+                    "type": "string"
                 },
                 "about": {
                     "type": "string"
