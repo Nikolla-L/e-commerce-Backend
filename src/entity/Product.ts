@@ -24,7 +24,7 @@ export class Product {
     price: number;
 
     @Column()
-    color: string;
+    color?: string;
 
     @Column({
         nullable: true
