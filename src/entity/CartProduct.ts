@@ -2,11 +2,8 @@ import {
     Entity,
     PrimaryGeneratedColumn,
     Column,
-    CreateDateColumn,
-    JoinColumn,
-    ManyToOne
+    CreateDateColumn
 } from 'typeorm'
-import { Product } from './Product';
 
 @Entity('cart')
 export class CartProduct {

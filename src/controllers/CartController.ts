@@ -3,6 +3,7 @@ import { CartProduct } from '../entity/CartProduct';
 import { BaseEntity, getRepository } from 'typeorm';
 import jwt from 'jsonwebtoken';
 import { Product } from '../entity/Product';
+import { changeStock } from '../service/StockFunctions';
 
 
 class CartController extends BaseEntity {
@@ -27,6 +28,10 @@ class CartController extends BaseEntity {
             return res.status(404).send('Product not found with this ID!');
         }
 
+        if(!product?.inStock) {
+            return res.status(403).send('Product is not avalaible');
+        }
+
         const newItem = {
             productId: productId,
             number: number,
@@ -34,8 +39,9 @@ class CartController extends BaseEntity {
         }
 
         const item = await getRepository(CartProduct).create(newItem);
-        const result = await getRepository(CartProduct).save(item);
-        return res.status(200).send('product added to cart');
+        changeStock(productId, false);
+        await getRepository(CartProduct).save(item);
+        return res.status(200).json(item);
     }
 
     static getProducts = async (req: Request, res: Response) => {
@@ -80,6 +86,9 @@ class CartController extends BaseEntity {
         const id = req.params.id;
         if(id) {
             try {
+                let cartProduct = await getRepository(CartProduct).findOneOrFail(id);
+                let productId = cartProduct?.productId;
+                changeStock(productId, true);
                 await getRepository(CartProduct).delete(id);
                 return res.status(200).send('Cart product has been deleted');
             } catch (error) {

@@ -153,6 +153,12 @@
                         "in": "query",
                         "required": false,
                         "description": "-მდე, ფასით პროდუქტების ფილტრი"
+                    },
+                    {
+                        "name": "stock",
+                        "in": "query",
+                        "required": false,
+                        "description": "ორი შესაძლო პარამეტრი გადაეცემა 'in' (ნიშნავს in stock) და 'out' (ნიშნავს out stock), თუ ცარიელი დარჩა ყველა მოაქვს"
                     }
                 ],
                 "responses": {

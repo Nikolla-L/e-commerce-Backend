@@ -49,6 +49,12 @@ export class Product {
     })
     careInstructions: string;
 
+    @Column({
+        name: 'in_stock',
+        default: true
+    })
+    inStock: boolean;
+
     @CreateDateColumn({
         name: 'created_at'
     })

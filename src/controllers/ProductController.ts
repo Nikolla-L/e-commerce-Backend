@@ -50,6 +50,7 @@ class ProductController {
     static getProducts = async (req: Request, res: Response) => {
         let { typeId, color, priceFrom, priceTo } = req.query;
         let sort = req.query.sort;
+        let inStock = req.query.stock;
         let productsRepo: any = '';
         let result: any = [];
         
@@ -79,6 +80,12 @@ class ProductController {
 
         if(priceFrom != null && priceTo != null) {
             productsRepo = productsRepo.andWhere('"price" BETWEEN :priceFrom AND :priceTo', {priceFrom: priceFrom, priceTo: priceTo});
+        }
+
+        if(inStock == 'in') {
+            productsRepo = productsRepo.andWhere('p.in_stock = :inStock', {inStock: true});
+        } else if(inStock == 'out') {
+            productsRepo = productsRepo.andWhere('p.in_stock = :inStock', {inStock: false});
         }
 
         switch (sort) {
