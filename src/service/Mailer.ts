@@ -11,12 +11,21 @@ const transporter = nodemailer.createTransport({
     }
 });
 
+export const sendRegistrationWelcome = async (email: string) => {
+    await transporter.sendMail({
+        from: '"Welcome" <eCommerseTeam@gmail.com>',
+        to: email,
+        subject: "welcome", 
+        html: `<h1>გილოცავთ!</h1><br/><p>თქვენ წარმატებით დარეგისტრირდით ჩვენი გაყიდვების საიტზე, ამიერიდან შეგიძლიათ იყიდოთ პროდუქტები სასურველ ფასად. მეტი ინფორმაციისთის ეწვიეთ ჩვენს არსებულ ვებ გვერდს</p>`,
+    });
+}
+
 export const sendWelcome = async (email: string) => {
     await transporter.sendMail({
         from: '"Welcome" <eCommerseTeam@gmail.com>',
         to: email,
         subject: "welcome", 
-        html: `<p>გმადლობთ გამოწერისთის, ამიერიდან თვქენ ყოველ ახალ დამატებულ პროდუქტზე მიიღებთ შეტყობინებას. არ გამაზოთ სიახლეები!</p>`,
+        html: `<h1 style="color: yellow">მოგესალმებით!</h1><br/><p>გმადლობთ გამოწერისთის, ამიერიდან თვქენ ყოველ ახალ დამატებულ პროდუქტზე მიიღებთ შეტყობინებას. არ გამაზოთ სიახლეები!</p>`,
     });
 }
 
@@ -25,7 +34,7 @@ export const sendNews = async (emails: Array<string>) => {
         from: '"e_commerse" <eCommerseTeam@gmail.com>',
         to: ['eCommerseTeam@gmail.com', ...emails],
         subject: "Check out new product", 
-        html: `<p>დაათვალიერეთ ახალი პროდუქტი ჩვენს ვებ-გვერდზე</p>`,
+        html: `<h1 style="color: blue">იჩქარეთ!</h1><br/><p>დაათვალიერეთ ახალი პროდუქტი ჩვენს ვებ-გვერდზე</p>`,
     });
 }
 

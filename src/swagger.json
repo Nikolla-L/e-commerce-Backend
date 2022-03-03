@@ -5,15 +5,6 @@
         "title": "ძირითადი URL არის http://ecommerce-web.us-east-1.elasticbeanstalk.com",
         "description": "E-commerse project with nodeJs & TypeORM"
     },
-    "servers": [
-        {
-            "url": "/"
-        },
-        {
-            "url": "/api/",
-            "description": "docker-compose და nginx proxy"
-        }
-    ],
     "tags": [
         {
             "name": "Auth",
@@ -36,7 +27,7 @@
         "/types": {
             "get": {
                 "tags":["Product"],
-                "summary": "პროდუქტის ტიპების Id-ების დათვალიერება",
+                "summary": "პროდუქტის ტიპების Id-ების დათვალიერება (ფილტრში ჩასაწერი Id-ები მათი შესაბამისი მნიშვნელობების მიხედვით)",
                 "responses": {
                     "200": {
                         "description": "A successful response"
@@ -47,7 +38,7 @@
         "/colors": {
             "get": {
                 "tags":["Product"],
-                "summary": "პროდუქტის შესაძლო ფერების დათვალიერება",
+                "summary": "პროდუქტის შესაძლო ფერების დათვალიერება (ფერის მიხედვით ფილტრის ფერები)",
                 "description": "მხოლოდ ამ ფერებითაა შესაძლებელი პროდუქტების დამატება და რედაქტირება, შესაბამისად ყველა პროდუქტის მიღებისას - გაფილტვრაც",
                 "responses": {
                     "200": {

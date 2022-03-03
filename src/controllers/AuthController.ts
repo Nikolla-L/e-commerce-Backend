@@ -1,27 +1,17 @@
 import { NextFunction, Request, Response } from 'express';
-import { User } from '../entity/User';
 import { BaseEntity, getRepository, getConnection } from 'typeorm';
+import { sendCode, sendRegistrationWelcome } from '../service/Mailer';
 import { validate } from 'class-validator';
-import { sendCode } from '../service/Mailer';
+import { User } from '../entity/User';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { generateString, isEmail } from '../service/Methods';
+
 const {OAuth2Client} = require('google-auth-library');
 const googleClient = new OAuth2Client(`1068850605287-o1pignk020ft6da6c5ijovube2km1k49.apps.googleusercontent.com`);
 
-// function to generater random numbers string
-const generateString = () => {
-    var result = '';
-    var characters = '0123456789';
-    var charactersLength = characters.length;
-    for ( var i = 0; i < 6; i++ ) {
-        result += characters.charAt(Math.floor(Math.random()*charactersLength));
-    }
-    return result;
-}
-// email validation
-const emailRegexp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
-
 class AuthController extends BaseEntity {
+    
     static login = async (req: Request, res: Response) => {
         const {email, password} = req.body;
         
@@ -29,7 +19,7 @@ class AuthController extends BaseEntity {
             return res.status(400).send('Reuires email and passwerd, both!')
         }
 
-        if(!emailRegexp.test(email)) {
+        if(!isEmail(email)) {
             return res.status(400).send('Bad request: email is not valid')
         }
 
@@ -70,7 +60,7 @@ class AuthController extends BaseEntity {
             return res.status(400).send('Please insert all values')
         }
 
-        if(!emailRegexp.test(email)) {
+        if(!isEmail(email)) {
             return res.status(400).send('Bad request: email is not valid')
         }
 
@@ -104,6 +94,7 @@ class AuthController extends BaseEntity {
             return res.status(403).send('Ops.. Occurred an error. Please try later.')
         }
 
+        sendRegistrationWelcome(email);
         return res.status(201).json(user);
     }
 
@@ -122,7 +113,7 @@ class AuthController extends BaseEntity {
             let emailExists = await userRepository.findOne({email: email});
             let userNameExists = await userRepository.findOne({userName: userName});
 
-            if(!emailRegexp.test(email) && email) {
+            if(!isEmail(email) && email) {
                 return res.status(400).send('Bad request: email is not valid');
             }
             if(emailExists && email != oldEmail) {
@@ -159,7 +150,7 @@ class AuthController extends BaseEntity {
     static sendMail = async (req: Request, res: any) => {
         const {email} = req.body;
         let user = await getRepository(User).findOne({email: email});
-        if(!emailRegexp.test(email) && email) {
+        if(!isEmail(email) && email) {
             return res.status(400).send('Bad request: email is not valid');
         }
         if(user) {

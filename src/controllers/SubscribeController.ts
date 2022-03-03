@@ -2,9 +2,8 @@ import { Request, Response } from 'express';
 import { Email } from '../entity/Email';
 import { BaseEntity, getRepository } from 'typeorm';
 import { sendWelcome } from '../service/Mailer';
+import { isEmail } from '../service/Methods';
 
-// email validation
-const emailRegexp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
 
 class SubscribeController extends BaseEntity {
     static addEmail = async (req: Request, res: any) => {
@@ -13,7 +12,7 @@ class SubscribeController extends BaseEntity {
         if(email == '' || email == null) {
             return res.status(400).send('Bad request');
         }
-        if(!emailRegexp.test(email)) {
+        if(!isEmail(email)) {
             return res.status(400).send('Bad request: email is not valid')
         }
 
