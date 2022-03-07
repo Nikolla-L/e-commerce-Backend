@@ -8,11 +8,12 @@ import { changeStock } from '../service/StockFunctions';
 
 class CartController extends BaseEntity {
     static getUserId = (req: any, res: any) => {
-        let token = req.cookies['session-token'];
-        if(!token) {
+        let token = req.cookies['session-tokenss'];
+        let headerToken = req.headers.authorization.split(" ")[1];
+        if(!token && !headerToken) {
             return res.status(401).send('U need authorization')
         }
-        return Object(jwt.verify(token, 'secret')).id?.toString()
+        return Object(jwt.verify(token || headerToken, 'secret')).id?.toString()
     }
     
     static addProduct = async (req: Request, res: Response) => {
