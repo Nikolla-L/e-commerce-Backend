@@ -23,6 +23,15 @@
             "description": "API for cart products actions"
         }
     ],
+    "components": {        
+        "securitySchemes": {
+          "bearerAuth": {
+            "type": "http",
+            "scheme": "bearer",
+            "bearerFormat": "JWT"
+          }
+        }
+    },
     "paths": {
         "/types": {
             "get": {
@@ -166,6 +175,11 @@
                 "produces": [
                     "application/json"
                 ],
+                "security": [
+                    {
+                       "bearerAuth": []
+                    }
+                 ],
                 "requestBody": {
                     "description": "Product object",
                     "required": true,
@@ -227,6 +241,11 @@
                         "description": "Id of single product"
                     }
                 ],
+                "security": [
+                    {
+                       "bearerAuth": []
+                    }
+                 ],
                 "produces": [
                     "application/json"
                 ],
@@ -267,6 +286,11 @@
                         "description": "Id of single product"
                     }
                 ],
+                "security": [
+                    {
+                       "bearerAuth": []
+                    }
+                 ],
                 "responses": {
                     "200": {
                         "description": "A successfully deleted"
@@ -313,7 +337,7 @@
             "post": {
                 "tags": ["Auth"],
                 "summary": "ავტორიზაცია",
-                "description": "ავტორიზაციის შემდეგ დაბლა არსებული როუტები ღიაა მხოლოდ ავტორიზებული მომხმარებლისთვის",
+                "description": "ავტორიზაციის შემდეგ დაბლა ბოქლომიანი როუტები ღიაა მხოლოდ ავტორიზებული მომხმარებლისთვის",
                 "produces": [
                     "application/json"
                 ],
@@ -498,6 +522,11 @@
                 "tags": ["Cart"],
                 "summary": "ქარტში დამატებული ყველა პროდუქტის მიღება",
                 "description": "არ სჭირდება არანირი პარამეტრის გადაცემა, საკმარისია იუზერი იყოს ავტორიზებული",
+                "security": [
+                    {
+                       "bearerAuth": []
+                    }
+                 ],
                 "responses": {
                     "200": {
                         "description": "A successful response"
@@ -513,6 +542,11 @@
                 "produces": [
                     "application/json"
                 ],
+                "security": [
+                    {
+                       "bearerAuth": []
+                    }
+                 ],
                 "requestBody": {
                     "description": "Cart object",
                     "required": true,
@@ -546,6 +580,11 @@
                         "description": "Id of single cart product (არ იგულისხმება productId, ჩისტად Id)"
                     }
                 ],
+                "security": [
+                    {
+                       "bearerAuth": []
+                    }
+                 ],
                 "responses": {
                     "200": {
                         "description": "A successful response"
@@ -572,6 +611,11 @@
                 "produces": [
                     "application/json"
                 ],
+                "security": [
+                    {
+                       "bearerAuth": []
+                    }
+                 ],
                 "requestBody": {
                     "description": "Product object",
                     "required": false,
@@ -606,6 +650,11 @@
                         "description": "Id of single cart product (არ იგულისხმება productId, ჩისტად Id)"
                     }
                 ],
+                "security": [
+                    {
+                       "bearerAuth": []
+                    }
+                 ],
                 "responses": {
                     "200": {
                         "description": "A successfully deleted"

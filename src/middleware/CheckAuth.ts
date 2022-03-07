@@ -2,7 +2,6 @@ import { NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
 export const checkAuthenicated = (req: any, res: any, next: NextFunction) => {
-    let token = req.cookies['session-token'];
     let headerToken = req.headers.authorization.split(" ")[1];
 
     if (!headerToken) {

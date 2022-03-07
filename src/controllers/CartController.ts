@@ -8,7 +8,6 @@ import { changeStock } from '../service/StockFunctions';
 
 class CartController extends BaseEntity {
     static getUserId = (req: any, res: any) => {
-        let token = req.cookies['session-tokenss'];
         let headerToken = req.headers.authorization.split(" ")[1];
         if(!headerToken) {
             return res.status(401).send('U need authorization')
