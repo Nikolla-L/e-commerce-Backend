@@ -8,8 +8,8 @@ import { changeStock } from '../service/StockFunctions';
 
 class CartController extends BaseEntity {
     static getUserId = (req: any, res: any) => {
-        let headerToken = req.headers.authorization.split(" ")[1];
-        if(!headerToken) {
+        let headerToken = req.headers.authorization?.split(" ")[1];
+        if(!headerToken || !req.headers.authorization) {
             return res.status(401).send('U need authorization')
         }
         return Object(jwt.verify(headerToken, 'secret')).id?.toString()
