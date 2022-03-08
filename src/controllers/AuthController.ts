@@ -150,7 +150,7 @@ class AuthController extends BaseEntity {
     static sendMail = async (req: Request, res: any) => {
         const {email} = req.body;
         let user = await getRepository(User).findOne({email: email});
-        if(!isEmail(email) && email) {
+        if(!isEmail(email)) {
             return res.status(400).send('Bad request: email is not valid');
         }
         if(user) {
