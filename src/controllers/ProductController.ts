@@ -275,7 +275,8 @@ const urls = [
     "https://static.fendi.com/dam/is/image/fendi/8BN244AFQ8F0H43_01?wid=540&hei=540&hash=9bdfd8c13b53948948ceccdb90afa859-17ee0b7568d",
     "https://cdn-images.farfetch-contents.com/17/54/91/08/17549108_37672960_300.jpg",
     'https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-louise-slide-sandal-buttermilk-5_04f1f6dd-4f7c-498b-bce7-2932fa651c00_360x.jpg?v=1637106712',
-    "https://images.timberland.com/is/image/timberland/10061024-HERO"
+    "https://images.timberland.com/is/image/timberland/10061024-HERO",
+    "https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-art-deco-cyclamen-1_ec8e69b6-92ea-4c48-b8b6-34601cf3c070_360x.jpg?v=1637106934"
 ]
 
 
