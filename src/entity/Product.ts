@@ -20,6 +20,16 @@ export class Product {
     })
     typeId: string
 
+    @Column({
+        default: false
+    })
+    sale: boolean;
+
+    @Column({
+        nullable: true
+    })
+    img: string;
+
     @Column()
     price: number;
 

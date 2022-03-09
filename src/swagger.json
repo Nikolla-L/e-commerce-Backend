@@ -718,6 +718,9 @@
                 "typeId": {
                     "type": "string"
                 },
+                "sale": {
+                    "type": "boolean"
+                },
                 "price": {
                     "type": "number"
                 },
