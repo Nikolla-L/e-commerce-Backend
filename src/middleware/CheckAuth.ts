@@ -14,5 +14,5 @@ export const checkAuthenicated = (req: any, res: any, next: NextFunction) => {
 
     verify()
     .then(() => next())
-    .catch(error =>  res.send('You are not authorized!'));
+    .catch(error =>  res.status(401).send('You are not authorized!'));
 }
