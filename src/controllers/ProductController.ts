@@ -30,7 +30,7 @@ class ProductController {
             title: title,
             typeId: typeId,
             sale: sale,
-            img: urls[Number(typeId)] ? urls[Number(typeId)] : 'https://cdn0.iconfinder.com/data/icons/cosmo-layout/40/box-512.png',
+            img: urls[Number(typeId)-1] ? urls[Number(typeId)-1] : 'https://cdn0.iconfinder.com/data/icons/cosmo-layout/40/box-512.png',
             price: Number(price),
             color: color,
             about: about,
@@ -116,7 +116,7 @@ class ProductController {
 
         result.forEach((product: Product) => {
             if(product.img == null) {
-                product.img = urls[Number(product.typeId)] ? urls[Number(product.typeId)] : 'https://cdn0.iconfinder.com/data/icons/cosmo-layout/40/box-512.png'
+                product.img = urls[Number(product.typeId)-1] ? urls[Number(product.typeId)-1] : 'https://cdn0.iconfinder.com/data/icons/cosmo-layout/40/box-512.png'
             }
         })
 
