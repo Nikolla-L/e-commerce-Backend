@@ -7,13 +7,13 @@ const request = require('request-promise');
 
 class ProductController {
     static postProduct = async (req: Request, res: any) => {
-        const {title, typeId, price, color, about, materials, dimensions, careInstructions} = req.body;
+        const {title, typeId, sale, price, color, about, materials, dimensions, careInstructions} = req.body;
         const types = ['1', '2', '3', '4', '5', '6', '7', 1, 2, 3, 4, 5, 6, 7, 'bags', 'shpoes'];
         const colors = ["blue", "black", "red", "white", "purple", "yellow", "green", "orange", "gray", "violet"];
         
         if(
-            title == '' || typeId == '' || price == '' || color == '' || about == '' || dimensions == '' || careInstructions == '' ||
-            title == null || typeId == null || price == null || color == null || about == null || dimensions == null || careInstructions == null
+            title == '' || typeId == '' ||  sale == '' || price == '' || color == '' || about == '' || dimensions == '' || careInstructions == '' ||
+            title == null || typeId == null || sale == null || price == null || color == null || about == null || dimensions == null || careInstructions == null
         ) {
             return res.status(400).send('Bad request: All fields must be filled');
         }
@@ -29,6 +29,8 @@ class ProductController {
         const newProduct = {
             title: title,
             typeId: typeId,
+            sale: sale,
+            img: urls[Number(typeId)-1] ? urls[Number(typeId)-1] : 'https://cdn0.iconfinder.com/data/icons/cosmo-layout/40/box-512.png',
             price: Number(price),
             color: color,
             about: about,
@@ -112,6 +114,12 @@ class ProductController {
                 break;
         }
 
+        result.forEach((product: Product) => {
+            if(product.img == null) {
+                product.img = urls[Number(product.typeId)-1] ? urls[Number(product.typeId)-1] : 'https://cdn0.iconfinder.com/data/icons/cosmo-layout/40/box-512.png'
+            }
+        })
+
         return res.status(200).json(result);
     }
 
@@ -165,7 +173,7 @@ class ProductController {
         if(productId==null) {
             return res.status(400).send('Bad Request: needs productId param');
         }
-        const {title, typeId, price, color, about, materials, dimensions, careInstructions} = req.body
+        const {title, typeId, sale, price, color, about, materials, dimensions, careInstructions} = req.body
 
         const types = ['1', '2', '3', '4', '5', '6', '7', 1, 2, 3, 4, 5, 6, 7, 'bags', 'shpoes']
         const colors = ["blue", "black", "red", "white", "purple", "yellow", "green", "orange", "gray", "violet"];
@@ -182,6 +190,7 @@ class ProductController {
             let updatedValues = {
                 title: title ? title : product.title,
                 typeId: typeId ? typeId : product.typeId,
+                sale: sale ? sale : product.sale,
                 price: Number(price) ? Number(price) : product.price,
                 color: color ? color : product.color,
                 about: about ? about : product.about,
@@ -216,45 +225,59 @@ class ProductController {
     }
 
     static getTypes = async (req: Request, res: Response) => {
-        const types = [
-            {
-                typeId: 'shoes',
-                typeName: 'Shoes'
-            },
-            {
-                typeId: 'bags',
-                typeName: 'Bags'
-            },
-            {
-                typeId: 1, 
-                typeName: "Tote bags"
-            },
-            {
-                typeId: 2, 
-                typeName: "Shoulder bags"
-            },
-            {
-                typeId: 3, 
-                typeName: "Crossbody bags"
-            },
-            {
-                typeId: 4, 
-                typeName: "Top handle bags"
-            },
-            {
-                typeId: 5, 
-                typeName: "Mini bags"
-            },
-            {
-                typeId: 6, 
-                typeName: "Sandals"
-            },
-            {
-                typeId: 7, 
-                typeName: "Boots"
-            }
-        ]
         return res.status(200).json(types)
     }
 }
+
+const types = [
+    {
+        typeId: 'shoes',
+        typeName: 'Shoes'
+    },
+    {
+        typeId: 'bags',
+        typeName: 'Bags'
+    },
+    {
+        typeId: 1, 
+        typeName: "Tote bags"
+    },
+    {
+        typeId: 2, 
+        typeName: "Shoulder bags"
+    },
+    {
+        typeId: 3, 
+        typeName: "Crossbody bags"
+    },
+    {
+        typeId: 4, 
+        typeName: "Top handle bags"
+    },
+    {
+        typeId: 5, 
+        typeName: "Mini bags"
+    },
+    {
+        typeId: 6, 
+        typeName: "Sandals"
+    },
+    {
+        typeId: 7, 
+        typeName: "Boots"
+    }
+]
+
+const urls = [
+    "https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-studio-denim-4_f841accc-a055-4250-a646-fe53c956b3af_360x.jpg?v=1637108123",
+    "https://www.miumiu.com/content/dam/miumiu_products/5/5BC/5BC107/2AJBF0009/5BC107_2AJB_F0009_V_OOO_SLR.png/jcr:content/renditions/miumiunux_color.600.600.jpg",
+    "https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-mini-naomi-bag-harvest-2_360x.jpg?v=1637107230",
+    "https://static.fendi.com/dam/is/image/fendi/8BN244AFQ8F0H43_01?wid=540&hei=540&hash=9bdfd8c13b53948948ceccdb90afa859-17ee0b7568d",
+    "https://cdn-images.farfetch-contents.com/17/54/91/08/17549108_37672960_300.jpg",
+    'https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-louise-slide-sandal-buttermilk-5_04f1f6dd-4f7c-498b-bce7-2932fa651c00_360x.jpg?v=1637106712',
+    "https://images.timberland.com/is/image/timberland/10061024-HERO",
+    "https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-art-deco-cyclamen-1_ec8e69b6-92ea-4c48-b8b6-34601cf3c070_360x.jpg?v=1637106934"
+]
+
+
 export default ProductController;
