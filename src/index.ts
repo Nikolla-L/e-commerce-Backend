@@ -20,7 +20,7 @@ createConnection()
     .then(async connection => {
         const app = express();
         app.use(cors({
-            origin: ["http://localhost:3000", "https://nika.d36wnoldzqqzoa.amplifyapp.com"],
+            origin: "*",
             methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
             credentials: true,
         }))
