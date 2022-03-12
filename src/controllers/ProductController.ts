@@ -50,9 +50,10 @@ class ProductController {
     }
 
     static getProducts = async (req: Request, res: Response) => {
-        let { typeId, color, priceFrom, priceTo } = req.query;
+        let { typeId, priceFrom, priceTo } = req.query;
         let sort = req.query.sort;
         let inStock = req.query.stock;
+        let colors = req.query.colors?.toString()?.split(', ');
         let productsRepo: any = '';
         let result: any = [];
         
@@ -76,17 +77,18 @@ class ProductController {
             productsRepo = getRepository(Product).createQueryBuilder('p').where('p.type_id = :typeId', {typeId});
         }
 
-        if(color) {
-            productsRepo = productsRepo.andWhere('p.color = :color', {color});
+        if(colors != null && colors?.length > 0) {
+            productsRepo = productsRepo.andWhere('p.color IN (:...colors)', {colors: [...colors]});
         }
 
         if(
-            (priceFrom != null &&
-            priceFrom!='') || (
-            priceTo!= '' &&
-            priceTo != null)
+            (priceFrom != null && priceFrom!='') || 
+            (priceTo!= '' && priceTo != null)
         ) {
-            productsRepo = productsRepo.andWhere('p.price > :priceFrom AND p.price < :priceTo', {priceFrom: Number(priceFrom) || 0, priceTo: Number(priceTo) || 100000});
+            productsRepo = productsRepo.andWhere(
+                'p.price > :priceFrom AND p.price < :priceTo',
+                {priceFrom: Number(priceFrom) || 0, priceTo: Number(priceTo) || 100000}
+            );
         }
 
         if(inStock == 'in') {

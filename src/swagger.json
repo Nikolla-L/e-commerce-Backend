@@ -131,10 +131,10 @@
                         "description": "პროდუქტის ტიპის მითითება (იგულისხმება ტიპები რომლებიც მაღლა როუტში მოიცემა)"
                     },
                     {
-                        "name": "color",
+                        "name": "colors",
                         "in": "query",
                         "required": false,
-                        "description": "პროდუქტის ფერი"
+                        "description": "პროდუქტის ფერები (მასივი)"
                     },
                     {
                         "name": "sort",
