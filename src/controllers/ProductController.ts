@@ -240,39 +240,48 @@ class ProductController {
 const types = [
     {
         typeId: 'shoes',
-        typeName: 'Shoes'
+        typeName: 'Shoes',
+        route: "shoes"
     },
     {
         typeId: 'bags',
-        typeName: 'Bags'
+        typeName: 'Bags',
+        route: "bags"
     },
     {
         typeId: 1, 
-        typeName: "Tote bags"
+        typeName: "Tote bags",
+        route: "tote-bags"
     },
     {
         typeId: 2, 
-        typeName: "Shoulder bags"
+        typeName: "Shoulder bags",
+        route: "shoulder-bags"
     },
     {
         typeId: 3, 
-        typeName: "Crossbody bags"
+        typeName: "Crossbody bags",
+        route: "crossbody-bags"
     },
     {
         typeId: 4, 
-        typeName: "Top handle bags"
+        typeName: "Top handle bags",
+        route: "top-handle-bags"
     },
     {
         typeId: 5, 
-        typeName: "Mini bags"
+        typeName: "Mini bags",
+        route: "mini-bags"
     },
     {
         typeId: 6, 
-        typeName: "Sandals"
+        typeName: "Sandals",
+        route: "sandals"
     },
     {
         typeId: 7, 
-        typeName: "Boots"
+        typeName: "Boots",
+        route: "boots"
     }
 ]
 
