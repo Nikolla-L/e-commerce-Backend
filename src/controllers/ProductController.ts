@@ -53,7 +53,7 @@ class ProductController {
         let { typeId, priceFrom, priceTo } = req.query;
         let sort = req.query.sort;
         let inStock = req.query.stock;
-        let colors = req.query.colors?.toString()?.split(', ');
+        let colors = req.query.colors?.toString()?.split(',');
         let productsRepo: any = '';
         let result: any = [];
         
@@ -77,8 +77,9 @@ class ProductController {
             productsRepo = getRepository(Product).createQueryBuilder('p').where('p.type_id = :typeId', {typeId});
         }
 
-        if(colors != null && colors?.length > 0) {
-            productsRepo = productsRepo.andWhere('p.color IN (:...colors)', {colors: [...colors]});
+        if(colors != null && colors?.length > 0 && colors?.some(color => color != '')) {
+            let colorsArr = colors.map(color => color.slice(1, -1));
+            productsRepo = productsRepo.andWhere('p.color IN (:...colors)', {colors: [...colorsArr]});
         }
 
         if(
