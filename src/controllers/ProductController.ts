@@ -80,8 +80,13 @@ class ProductController {
             productsRepo = productsRepo.andWhere('p.color = :color', {color});
         }
 
-        if(priceFrom != null && priceTo != null) {
-//             productsRepo = productsRepo.andWhere('"price" BETWEEN :priceFrom AND :priceTo', {priceFrom: priceFrom, priceTo: priceTo});
+        if(
+            (priceFrom != null &&
+            priceFrom!='') || (
+            priceTo!= '' &&
+            priceTo != null)
+        ) {
+            productsRepo = productsRepo.andWhere('p.price > :priceFrom AND p.price < :priceTo', {priceFrom: Number(priceFrom) || 0, priceTo: Number(priceTo) || 100000});
         }
 
         if(inStock == 'in') {
