@@ -81,7 +81,7 @@ class ProductController {
         }
 
         if(priceFrom != null && priceTo != null) {
-            productsRepo = productsRepo.andWhere('"price" BETWEEN :priceFrom AND :priceTo', {priceFrom: priceFrom, priceTo: priceTo});
+//             productsRepo = productsRepo.andWhere('"price" BETWEEN :priceFrom AND :priceTo', {priceFrom: priceFrom, priceTo: priceTo});
         }
 
         if(inStock == 'in') {
