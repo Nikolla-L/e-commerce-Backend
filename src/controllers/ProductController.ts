@@ -62,16 +62,11 @@ class ProductController {
         } else if (typeId == 'bags') {
             productsRepo = getRepository(Product)
                             .createQueryBuilder('p')
-                            .where('p.type_id = :typeId', {typeId: 1 })
-                            .orWhere('p.type_id = :typeId', {typeId: 2})
-                            .orWhere('p.type_id = :typeId', {typeId: 3})
-                            .orWhere('p.type_id = :typeId', {typeId: 4})
-                            .orWhere('p.type_id = :typeId', {typeId: 5});
+                            .where('p.type_id < :typeId', {typeId: 6 });
         } else if (typeId == 'shoes') {
             productsRepo = getRepository(Product)
                             .createQueryBuilder('p')
-                            .where('p.type_id = :typeId', {typeId: 6})
-                            .orWhere('p.type_id = :typeId', {typeId: 7});
+                            .where('p.type_id > :typeId', {typeId: 5});
         } else {
             typeId = typeId.toString();
             productsRepo = getRepository(Product).createQueryBuilder('p').where('p.type_id = :typeId', {typeId});
