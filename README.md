@@ -1,4 +1,4 @@
-# e-commerse project's backend with nodeJs and TypeOrm
+# e-commerse project's backend with node.js and TypeOrm
 
 Steps to run this project:
 
